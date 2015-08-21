@@ -1,0 +1,65 @@
+##
+# :INFO:
+# Should be executed from project root like this:
+# $ haxe test/test.hxml
+##
+
+-cmd mkdir -p build
+
+##
+# Build
+##
+
+-cmd echo "[Building CPP]"
+--next test/hxml/cpp.hxml
+
+-cmd echo "[Building NEKO]"
+--next test/hxml/neko.hxml
+
+-cmd echo "[Building JAVASCRIPT]"
+--next test/hxml/javascript.hxml
+
+-cmd echo "[Building PHP]"
+--next test/hxml/php.hxml
+
+-cmd echo "[Building SWF]"
+--next test/hxml/swf.hxml
+
+-cmd echo "[Building JAVA]"
+--next test/hxml/java.hxml
+
+-cmd echo "[Building C#]"
+--next test/hxml/cs.hxml
+
+-cmd echo "[Building PYTHON]"
+--next test/hxml/python.hxml
+
+##
+# Run
+##
+-cmd echo "\n"
+--next
+
+-cmd echo "\n[Running CPP]"
+-cmd chmod +x ./build/cpp/Test-debug && ./build/cpp/Test-debug
+
+-cmd echo "\n[Running NEKO]"
+-cmd neko ./build/Test.n
+
+-cmd echo "\n[Running JAVASCRIPT]"
+-cmd nodejs ./build/Test.js
+
+-cmd echo "\n[Running PHP]"
+-cmd php build/php/index.php
+
+-cmd echo "\n[Running SWF]"
+-cmd if [ -z "$SKIP_SWF" ]; then fdb ./build/Test.swf 2> /dev/null && cat ~/.macromedia/Flash_Player/Logs/flashlog.txt; else  echo "SKIP"; fi
+
+-cmd echo "\n[Running JAVA]"
+-cmd chmod +x ./build/java/Test-Debug.jar && ./build/java/Test-Debug.jar
+
+-cmd echo "\n[Running C#]"
+-cmd mono ./build/cs/bin/Test-Debug.exe
+
+-cmd echo "\n[Running PYTHON]"
+-cmd python3 ./build/Test.py

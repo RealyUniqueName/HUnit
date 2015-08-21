@@ -1,0 +1,5 @@
+-lib hunit
+-cp test/src
+-main Test
+-debug
+-neko build/Test.n

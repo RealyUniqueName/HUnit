@@ -1,0 +1,15 @@
+{
+    "name"         : "hunit",
+    "url"          : "https://github.com/RealyUniqueName/HUnit",
+    "license"      : "MIT",
+    "tags"         : ["unit", "test", "cross", "mock"],
+    "description"  : "HUnit - unit testing framework with mocks",
+    "version"      : "0.1.0",
+    "releasenote"  : "Initial release",
+    "classPath"    : "src",
+    "contributors" : ["RealyUniqueName"],
+    "dependencies" : {
+        "exception"  : "",
+        "tink_macro" : ""
+    }
+}
