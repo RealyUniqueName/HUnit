@@ -31,7 +31,8 @@ In the beginning I was fine with standard `haxe.unit` package. Then with my proj
 which I implemented in some minor extensions for `haxe.unit`. At some point I became in need of mocking. [Mockatoo](http://lib.haxe.org/p/mockatoo/) 
 was great, but did not work on all targets, so i implemented simple mocking. And so on, and so forth...  
 Suddenly I looked at all that stuff and saw almost all `haxe.unit` code overriden by my 'extensions'. 
-So I decided to separate them into standalone unit testing framework.
+So I decided to separate them into standalone unit testing framework.  
+[To contents](#contents)
 
 
 Features
@@ -42,14 +43,17 @@ Features
 * Easy test suite setup;
 * Grouping tests, which allows to include/exclude some tests when you want to check some specific things without running other tests.
 * Verbose failure messages;
-* All targets support.
+* All targets support.  
+
+[To contents](#contents)
 
 
 Installation
 -----------------
 ```
 haxelib git hunit https://github.com/RealyUniqueName/HUnit.git
-```
+```  
+[To contents](#contents)
 
 
 Basic usage
@@ -69,7 +73,8 @@ If you don't need any special configuration for your test suite, your `test.hxml
 #project specific setup
 -neko Test.n
 ```
-Now all you need is to write your test cases.
+Now all you need is to write your test cases.  
+[To contents](#contents)
 
 
 Advanced usage
@@ -100,7 +105,8 @@ class Test {
         //<...>
     }
 }
-```
+```  
+[To contents](#contents)
 
 
 Test cases
@@ -131,13 +137,16 @@ class SomeFeatureTest extends hunit.TestCase
         assert.equal(expected, actual, '2-1 and 1 should be equal');
     }
 }
-```
+```  
+[To contents](#contents)
 
 
 Test reports
 -----------------
 You can implement `hunit.IReportWriter` and pass it to `hunit.TestSuite` constructor to be able to create reports in xml
-or json or to do whatever you want with tests results.
+or json or to do whatever you want with tests results.  
+[To contents](#contents)
+
 
 Mocking
 -----------------
@@ -181,7 +190,8 @@ class MyTest extends hunit.TestCase
         assert.type(hunit.mock.IMock, m);
     }
 }
-```
+```  
+[To contents](#contents)
 
 
 Stubbing
@@ -231,7 +241,8 @@ public function testStubbing ()
 }
 ```
 You can pass matchers instead of exact values to stubbed method arguments. Read below for more on matchers.  
-By default stubbed methods return `null` or type specific default value for `Int`, `Bool`, `Float` on static platforms.
+By default stubbed methods return `null` or type specific default value for `Int`, `Bool`, `Float` on static platforms.  
+[To contents](#contents)
 
 
 Verifying method calls
@@ -274,6 +285,8 @@ Specify the amount of expected calls using these methods:
 * `atLeast(amount)` Test passes if method will be called at least `amount` times;
 * `exactly(amount)` Test passes if method will be called exactly `amount` times.
 
+[To contents](#contents)
+
 
 Validating exceptions
 -----------------
@@ -289,7 +302,8 @@ public function testMethodThrowsException ()
 }
 ```
 This test will pass only if 'Terrible error' will be raised.
-Instead of exact value you can pass matchers to `expectException()`.  Read below for more on matchers.
+Instead of exact value you can pass matchers to `expectException()`.  Read below for more on matchers.  
+[To contents](#contents)
 
 
 Assertions
@@ -353,7 +367,8 @@ assert.fail (message:String = null, ?pos:PosInfos);
 
 /** Mark test as successful if there are no other assertions in test */
 assert.success (?pos:PosInfos);
-```
+```  
+[To contents](#contents)
 
 
 Matchers
@@ -410,7 +425,8 @@ match.notEqual<T> (value:T);
 
 /** Match if `verify()` returns `true` when invoked against verified value */
 match.callback<T> (verify:T->Bool);
-```
+```  
+[To contents](#contents)
 
 
 Compilation flags
@@ -423,7 +439,9 @@ Path should be specified relative to current working directory from which `haxe`
 * `-D HUNIT_GROUP=group1,group2,<...>`  
 Run tests assigned to specified groups only. Tests can be assigned to some groups by adding meta `@group(group1,group4,group8)` to test methods.
 * `-D HUNIT_EXCLUDE_GROUP=group1,group2,<...>`  
-Do not run tests assigned to specified groups.
+Do not run tests assigned to specified groups.  
+
+[To contents](#contents)
 
 
 Meta for test methods
@@ -431,12 +449,14 @@ Meta for test methods
 * `@group('group1', 'group2', <...>)`  
 Assign test to specified groups.
 * `@incomplete('Because something is not implemented')`  
-Mark test as incomplete. This meta will add warning to test report.
+Mark test as incomplete. This meta will add warning to test report.  
+[To contents](#contents)
 
 
 Limitations
 -----------
 It's not allowed to stub or expect `toString()` methods. HXCPP does not allow methods named `toString()` to return values
 other than strings, while HUnit needs to return another type to chain configuration methods for stubs and expects. 
-If you really need to operate `toString()` create another method like `asString()` and use it.
+If you really need to operate `toString()` create another method like `asString()` and use it.  
+[To contents](#contents)
 
