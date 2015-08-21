@@ -2,6 +2,26 @@ HUnit
 =================
 HUnit - crossplatform unit testing framework for Haxe language with built-in mocking, stubbing and spying.
 
+Contents
+-----------------
+* [Why yet another unit testing framework?](#why-yet-another-unit-testing-framework)
+* [Features](#features)
+* [Installation](#installation)
+* [Basic usage](#basic-usage)
+* [Advanced usage](#advanced-usage)
+* [Test cases](#test-cases)
+* [Test reports](#test-reports)
+* [Mocking](#mocking)
+* [Stubbing](#stubbing)
+* [Verifying method calls](#verifying-method-calls)
+* [Validating exceptions](#validating-exceptions)
+* [Assertions](#assertions)
+* [Matchers](#matchers)
+* [Compilation flags](#compilation-flags)
+* [Meta for test methods](#meta-for-test-methods)
+* [Limitations](#limitations)
+
+
 Why yet another unit testing framework?
 -----------------
 Indeed, there are great frameworks like [utest](http://lib.haxe.org/p/utest/) and [munit](http://lib.haxe.org/p/munit/) already.
@@ -13,6 +33,7 @@ was great, but did not work on all targets, so i implemented simple mocking. And
 Suddenly I looked at all that stuff and saw almost all `haxe.unit` code overriden by my 'extensions'. 
 So I decided to separate them into standalone unit testing framework.
 
+
 Features
 -----------------
 * Assertions! Wow!
@@ -23,11 +44,13 @@ Features
 * Verbose failure messages;
 * All targets support.
 
+
 Installation
 -----------------
 ```
 haxelib git hunit https://github.com/RealyUniqueName/HUnit.git
 ```
+
 
 Basic usage
 -----------------
@@ -47,6 +70,7 @@ If you don't need any special configuration for your test suite, your `test.hxml
 -neko Test.n
 ```
 Now all you need is to write your test cases.
+
 
 Advanced usage
 ----------------
@@ -78,6 +102,7 @@ class Test {
 }
 ```
 
+
 Test cases
 -----------------
 Test case classes should extend `hunit.TestCase`:
@@ -108,6 +133,7 @@ class SomeFeatureTest extends hunit.TestCase
 }
 ```
 
+
 Test reports
 -----------------
 You can implement `hunit.IReportWriter` and pass it to `hunit.TestSuite` constructor to be able to create reports in xml
@@ -115,7 +141,8 @@ or json or to do whatever you want with tests results.
 
 Mocking
 -----------------
-Right now mocking is only supported for classes and interfaces. Abstracts and typedefs are candidates to be implemented.
+Right now mocking is only supported for classes and interfaces.  
+Abstracts and typedefs are candidates to be implemented.  
 Let's imagine we want to mock following class:
 ```haxe
 class MyClass<T> {
@@ -155,6 +182,7 @@ class MyTest extends hunit.TestCase
     }
 }
 ```
+
 
 Stubbing
 -----------------
@@ -198,10 +226,13 @@ public function testStubbing ()
 
     //stub all methods by default
     var m = mock(MyClass, [String]).stubAll().create('Hello');
+    //but one method should use original behavior
+    expect(m).changeValue().unstub();
 }
 ```
 You can pass matchers instead of exact values to stubbed method arguments. Read below for more on matchers.  
 By default stubbed methods return `null` or type specific default value for `Int`, `Bool`, `Float` on static platforms.
+
 
 Verifying method calls
 -----------------
@@ -240,12 +271,13 @@ Specify the amount of expected calls using these methods:
 * `any()` (default) Never fail because of invocations count;
 * `once()` Test passes if method will be called one time only;
 * `never()` Test passes if method will be never called;
-* `atLeast(amount)` Test passes if method will be at least `amount` times;
+* `atLeast(amount)` Test passes if method will be called at least `amount` times;
 * `exactly(amount)` Test passes if method will be called exactly `amount` times.
+
 
 Validating exceptions
 -----------------
-If you want to test some unit throws exception.
+If you want to be sure some unit throws exception.
 ```
 public function testMethodThrowsException () 
 {
@@ -367,7 +399,7 @@ match.type<T> (type:Class<T>);
 /** Match strings which match `pattern` */
 match.regexp (pattern:EReg);
 
-/** Match objects which fields values match corresponding fields values of `pattern`. */
+/** Match objects whose fields values match corresponding fields values of `pattern`. */
 match.similar (pattern:Dynamic);
 
 /** Match values which are equal to `value` */
@@ -380,9 +412,9 @@ match.notEqual<T> (value:T);
 match.callback<T> (verify:T->Bool);
 ```
 
+
 Compilation flags
 -----------------
-
 * `-main HUnit`  
 If your test suite does not need any special configuration, you can use `HUnit` as main class for test suite.
 * `-D HUNIT_DIR=path/to/dir`  
@@ -400,6 +432,7 @@ Meta for test methods
 Assign test to specified groups.
 * `@incomplete('Because something is not implemented')`  
 Mark test as incomplete. This meta will add warning to test report.
+
 
 Limitations
 -----------
