@@ -13,6 +13,11 @@ class MockDummy<T> {
 }
 
 
+interface IMockDummy<T> {
+    public function setItem (item:T) : T;
+}
+
+
 /**
  * Test mocking
  *
@@ -66,6 +71,20 @@ class MockTest extends TestCase
             //avoid failing test
             __hu_state.pendingExceptions.remove(e);
         }
+    }
+
+
+    /**
+     * Check interface mocking ability
+     *
+     */
+    public function testInterfaceMocking () : Void
+    {
+        var m = mock(IMockDummy, [String]).get();
+
+        stub(m).setItem().returns('World');
+        var result = m.setItem('Hello');
+        assert.equal('World', result);
     }
 
 }//class MockTest
