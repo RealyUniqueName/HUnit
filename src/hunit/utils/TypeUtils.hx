@@ -107,6 +107,7 @@ class TypeUtils
     {
         var type : ClassType = switch (type) {
             case TInst(t,p): t.get();
+            // case TAnonymous(a) : trace(a.toString()); null;
             case _         : throw 'Not implemented';
         }
 
@@ -146,8 +147,9 @@ class TypeUtils
     static public function countTypeParameters (type:Type) : Int
     {
         switch (type) {
-            case TInst(_,p): return p.length;
-            case _: throw "Not implemented";
+            case TInst(_,p) : return p.length;
+            // case TAnonymous(_.get() => td) : return 0;
+            case _ : throw "Not implemented";
         }
     }
 

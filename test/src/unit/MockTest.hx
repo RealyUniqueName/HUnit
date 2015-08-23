@@ -18,6 +18,14 @@ interface IMockDummy<T> {
 }
 
 
+typedef TDClassDummy<T> = MockDummy<T>;
+
+
+typedef TDAnonDummy<T> = {
+    function setItem (item:T) : T;
+}
+
+
 /**
  * Test mocking
  *
@@ -86,5 +94,32 @@ class MockTest extends TestCase
         var result = m.setItem('Hello');
         assert.equal('World', result);
     }
+
+
+    /**
+     * Check class/interface typedef mocking ability
+     *
+     */
+    public function testTypedefClassMocking () : Void
+    {
+        var m = mock(TDClassDummy, [String]).get();
+
+        assert.type(MockDummy, m);
+        assert.type(IMock, m);
+    }
+
+
+    // /**
+    //  * Check anonymous structure typedef mocking ability
+    //  *
+    //  */
+    // public function testTypedefAnonMocking () : Void
+    // {
+    //     var m = mock(TDAnonDummy, [String]).get();
+
+    //     stub(m).setItem().returns('World');
+    //     var result = m.setItem('Hello');
+    //     assert.equal('World', result);
+    // }
 
 }//class MockTest

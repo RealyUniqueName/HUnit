@@ -58,7 +58,7 @@ class Test extends TestSuite
         trace('Traces restored');
 
         var totalCases = 7;
-        var totalTests = 43;
+        var totalTests = 44;
 
         if (report.fails.length != 0 || report.warnings.length != 0) return;
         #if HUNIT_GROUP return; #end
