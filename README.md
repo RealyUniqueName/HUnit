@@ -428,6 +428,8 @@ If your test suite does not need any special configuration, you can use `HUnit` 
 * `-D HUNIT_TEST_DIR=path/to/dir`  
 Adds all tests in path/to/dir to test suite if combined with `-main HUnit`.  
 Path should be specified relative to current working directory from which `haxe` compiler is executed.
+* `-D HUNIT_EXCLUDE=some.tests,some.SingleTest,<...>`  
+Exclude specified packages and/or classes from test suite
 * `-D HUNIT_GROUP=group1,group2,<...>`  
 Run tests assigned to specified groups only. Tests can be assigned to some groups by adding meta `@group(group1,group4,group8)` to test methods.
 * `-D HUNIT_EXCLUDE_GROUP=group1,group2,<...>`  

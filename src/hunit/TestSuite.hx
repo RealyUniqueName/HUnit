@@ -42,11 +42,13 @@ class TestSuite
     public var groups : Array<String>;
     /** Do not run tests assigned to these groups */
     public var excludeGroups : Array<String>;
+    /** Exclude specified packages and/or classes from tests */
+    public var exclude : Array<String>;
 
     /** Current test state */
     private var state : Null<TestState>;
     /** List of test cases added to this test suite */
-    private var cases : List<TestCase>;
+    private var cases : Array<TestCase>;
     /** Temporary stored original `trace()` method */
     private var originalTrace : Null<Dynamic->?PosInfos->Void>;
     /** Function which outputs something to user */
@@ -65,8 +67,10 @@ class TestSuite
      */
     public function new (reportWriter:IReportWriter = null, printer:Dynamic->Void = null) : Void
     {
-        groups = Utils.getTestGroups();
-        excludeGroups = Utils.getTestGroups(true);
+        groups = Utils.getDefinedList('HUNIT_GROUP');
+        excludeGroups = Utils.getDefinedList('HUNIT_EXCLUDE_GROUP');
+
+        exclude = Utils.getDefinedList('HUNIT_EXCLUDE');
 
         if (printer == null) {
             printer = Utils.print;
@@ -79,7 +83,7 @@ class TestSuite
         }
         this.reportWriter = reportWriter;
 
-        cases  = new List();
+        cases  = [];
         report = createReport();
     }
 
@@ -102,7 +106,7 @@ class TestSuite
      */
     public function add (testCase:TestCase) : Void
     {
-        cases.add(testCase);
+        cases.push(testCase);
     }
 
 
@@ -123,7 +127,7 @@ class TestSuite
         printHeader();
 
         var total = 1;
-        for (testCase in cases) {
+        for (testCase in cases.filterCases(exclude)) {
             var data  = new TestCaseData(testCase);
 
             onCaseBegin(testCase, data);

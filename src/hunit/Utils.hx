@@ -3,6 +3,7 @@ package hunit;
 import haxe.PosInfos;
 import haxe.rtti.CType;
 import haxe.rtti.Rtti;
+import hunit.TestCase;
 import Type;
 
 #if macro
@@ -196,19 +197,35 @@ class Utils
 
 
     /**
-     * Get list of test groups defined with `-D HUNIT_GROUP=group1,group2...`
+     * Remove test cases listed in `exclude`
      *
      */
-    macro static public function getTestGroups (excluded:Bool = false) : ExprOf<Array<String>>
+    static public function filterCases (cases:Array<TestCase>, excludes:Array<String>) : Array<TestCase>
     {
-        var flag = (excluded ? 'HUNIT_EXCLUDE_GROUP' : 'HUNIT_GROUP');
+        return cases.filter(function (c) {
+            var className : String = Type.getClassName(Type.getClass(c));
 
-        var hunitGroup = Context.definedValue(flag);
-        if (hunitGroup == null || hunitGroup.trim().length == 0) {
+            for (e in excludes) {
+                if (className.indexOf(e) == 0) return false;
+            }
+
+            return true;
+        });
+    }
+
+
+    /**
+     * Get list provided by compilation flag like `-D SOME_FLAG=item1,item2`
+     *
+     */
+    macro static public function getDefinedList (flag:String) : ExprOf<Array<String>>
+    {
+        var definedList = Context.definedValue(flag);
+        if (definedList == null || definedList.trim().length == 0) {
             return macro [];
         }
 
-        var groups : Array<Expr> = hunitGroup.split(',').map(StringTools.trim).map(function(g) return macro $v{g});
+        var groups : Array<Expr> = definedList.split(',').map(StringTools.trim).map(function(g) return macro $v{g});
 
         return macro [$a{groups}];
     }

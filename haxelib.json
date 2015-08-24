@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.1",
-    "releasenote"  : "Methods with @test meta considered as tests too. ",
+    "version"      : "0.1.2",
+    "releasenote"  : "Exclude packages and/or classes from test suite with `-D HUNIT_EXCLUDE=package1,package2.SomeClass` ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
