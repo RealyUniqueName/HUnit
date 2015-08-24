@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.0",
-    "releasenote"  : "Initial release",
+    "version"      : "0.1.1",
+    "releasenote"  : "Methods with @test meta considered as tests too. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {

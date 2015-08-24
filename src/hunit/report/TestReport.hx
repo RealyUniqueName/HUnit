@@ -33,6 +33,8 @@ class TestReport
     public var warnings (default,null) : List<TestWarning>;
     /** passed tests without warnings */
     public var successful (default,null) : List<TestSuccess>;
+    /** Get finished tests count */
+    public var testCount (get,never) : Int;
     /** Total assertions performed */
     public var assertionCount : Int = 0;
 
@@ -136,6 +138,16 @@ class TestReport
         spentTime = Math.round((endTime - startTime) * 1000) / 1000;
 
         return this.endTime = endTime;
+    }
+
+
+    /**
+     * Getter `testCount`
+     *
+     */
+    private function get_testCount () : Int
+    {
+        return  successful.length + warnings.length + fails.length;
     }
 
 }//class TestReport

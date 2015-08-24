@@ -9,6 +9,7 @@ import hunit.TestCase;
 using StringTools;
 using Type;
 using Reflect;
+using hunit.utils.CTypeClassFieldUtils;
 
 
 typedef TestData = {
@@ -25,9 +26,6 @@ typedef TestData = {
  */
 class TestCaseData
 {
-    /** If method starts with this string, it is considered to be a test */
-    static public inline var TEST_PREFIX = 'test';
-
     /** Class name of test case */
     public var className (get,never) : String;
     /** File where test case is declared */
@@ -83,7 +81,7 @@ class TestCaseData
     private function gatherTestData () : Void
     {
         for (field in rtti.fields) {
-            if (field.name.substr(0, TEST_PREFIX.length) != TEST_PREFIX) continue;
+            if (!field.isTest()) continue;
 
             //this is not a method
             if (!testCase.field(field.name).isFunction()) continue;

@@ -122,13 +122,21 @@ class SomeFeatureTest extends hunit.TestCase
     override public function tearDownTestCase () : Void { }
 
     /**
-     * Test methods should start with `test` prefix
+     * Test methods should start with `test` prefix or should be marked with `@test` meta
      */
     public function testSomeStuff()
     {
         var expected = 1;
         var actual   = 2 - 1;
         assert.equal(expected, actual, '2-1 and 1 should be equal');
+    }
+
+    @test 
+    public function someOtherStuff()
+    {
+        var expected = 'hello';
+        var actual   = 'hell' + 'o';
+        assert.equal(expected, actual);   
     }
 }
 ```
@@ -428,6 +436,8 @@ Do not run tests assigned to specified groups.
 
 Meta for test methods
 ---------------------
+* `@test`  
+Method is considered to be a test if marked with this meta.
 * `@group('group1', 'group2', <...>)`  
 Assign test to specified groups.
 * `@incomplete('Because something is not implemented')`  

@@ -1,8 +1,6 @@
 package unit;
 
 import hunit.TestCase;
-import hunit.TestSuite;
-import hunit.warnings.IncompleteTestWarning;
 import hunit.warnings.NoAssertionsWarning;
 import hunit.warnings.NoTestsWarning;
 
@@ -41,20 +39,6 @@ class WarningTest extends TestCase
     }
 
 
-    /**
-     * Ensure @incomplete meta is working
-     *
-     */
-    public function testIncompleteTest () : Void
-    {
-        var report = Test.self(new IncompleteTest());
-
-        assert.equal(1, report.warnings.length);
-
-        var warning = report.warnings.first().warning;
-        assert.type(IncompleteTestWarning, warning);
-        assert.equal('details', warning.message);
-    }
 }//class WarningTest
 
 
@@ -79,12 +63,3 @@ private class NoTestsTest extends TestCase
 }//class NoTestsTest
 
 
-/**
- * Emits 'incomplete test' warning
- *
- */
-private class IncompleteTest extends TestCase
-{
-    @incomplete('details')
-    public function test_incomplete () : Void {}
-}//class IncompleteTest
