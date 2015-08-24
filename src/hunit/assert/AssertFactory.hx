@@ -6,6 +6,7 @@ import hunit.assert.MatchAssert;
 import hunit.exceptions.AssertException;
 import hunit.match.Match;
 import hunit.TestCase;
+import hunit.warnings.ForcedWarning;
 
 
 
@@ -179,6 +180,17 @@ class AssertFactory
     public function fail (message:String = null, ?pos:PosInfos) : Void
     {
         throw new AssertException(message == null ? 'Forced test failure.' : message, pos);
+    }
+
+
+    /**
+     * Force warning
+     *
+     */
+    public function warn (message:String = null, ?pos:PosInfos) : Void
+    {
+        testCase.__hu_state.warn(new ForcedWarning(message == null ? 'Forced warning' : message));
+        testCase.__hu_state.asserted.add(new BaseAssert(pos));
     }
 
 
