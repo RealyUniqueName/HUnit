@@ -22,6 +22,7 @@ typedef TDClassDummy<T> = MockDummy<T>;
 
 
 typedef TDAnonDummy<T> = {
+    function new (item:T) : Void;
     function setItem (item:T) : T;
 }
 
@@ -113,13 +114,14 @@ class MockTest extends TestCase
     //  * Check anonymous structure typedef mocking ability
     //  *
     //  */
+    // @incomplete('Requires mocking typedefs of anonymous structures')
     // public function testTypedefAnonMocking () : Void
     // {
-    //     var m = mock(TDAnonDummy, [String]).get();
+    //     // var m = mock(TDAnonDummy, [String]).get();
 
-    //     stub(m).setItem().returns('World');
-    //     var result = m.setItem('Hello');
-    //     assert.equal('World', result);
+    //     // stub(m).setItem().returns('World');
+    //     // var result = m.setItem('Hello');
+    //     // assert.equal('World', result);
     // }
 
 }//class MockTest

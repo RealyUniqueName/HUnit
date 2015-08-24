@@ -39,7 +39,7 @@ class MockTypeGenerator
     public function new (type:Expr, parameters:Expr) : Void
     {
         target               = type.toString();
-        targetType           = target.getType().follow();
+        targetType           = target.resolve();
         targetTypeParameters = parameters.toTypeList().map(function(t) return t.follow());
 
         if (targetType.countTypeParameters() != targetTypeParameters.length) {
