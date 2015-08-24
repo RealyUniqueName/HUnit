@@ -417,7 +417,7 @@ Compilation flags
 -----------------
 * `-main HUnit`  
 If your test suite does not need any special configuration, you can use `HUnit` as main class for test suite.
-* `-D HUNIT_DIR=path/to/dir`  
+* `-D HUNIT_TEST_DIR=path/to/dir`  
 Adds all tests in path/to/dir to test suite if combined with `-main HUnit`.  
 Path should be specified relative to current working directory from which `haxe` compiler is executed.
 * `-D HUNIT_GROUP=group1,group2,<...>`  

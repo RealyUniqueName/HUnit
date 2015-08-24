@@ -4,3 +4,4 @@ build/*
 *.n
 *.hx.tmp
 .idea
+*.zip
