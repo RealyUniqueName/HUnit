@@ -19,6 +19,8 @@ class MatchDummy {
     public function new() {
         nestedField = {enumField:Item1('world')};
     }
+
+    public function alsoHasMethod() return 'Useless stuff';
 }
 
 

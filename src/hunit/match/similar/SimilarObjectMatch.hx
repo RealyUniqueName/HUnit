@@ -128,8 +128,16 @@ class SimilarObjectMatch<T> extends Match<T>
             case _              : [];
         }
 
+        var property;
         for (field in fields) {
-            map.set(field, Reflect.getProperty(object, field));
+            #if php
+                untyped __php__("if (in_array($field, get_class_methods($object))) continue");
+            #end
+
+            property = Reflect.getProperty(object, field);
+            if (!Reflect.isFunction(property)) {
+                map.set(field, property);
+            }
         }
 
         return map;
