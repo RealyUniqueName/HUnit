@@ -359,6 +359,9 @@ assert.similar (expected:Dynamic, actual:Dynamic, message:String = null, ?pos:Po
 /** Force test failure */
 assert.fail (message:String = null, ?pos:PosInfos);
 
+/** Add warning to test report */
+assert.warn (message:String = null, ?pos:PosInfos);
+
 /** Mark test as successful if there are no other assertions in test */
 assert.success (?pos:PosInfos);
 ```
