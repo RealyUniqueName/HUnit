@@ -2,10 +2,10 @@
     "name"         : "hunit",
     "url"          : "https://github.com/RealyUniqueName/HUnit",
     "license"      : "MIT",
-    "tags"         : ["unit", "test", "cross", "mock"],
+    "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.2",
-    "releasenote"  : "Exclude packages and/or classes from test suite with `-D HUNIT_EXCLUDE=package1,package2.SomeClass` ",
+    "version"      : "0.1.3",
+    "releasenote"  : "Do not force `-no--inline` anymore. Show error for stubbing/expecting inlined mehtods. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {

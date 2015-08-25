@@ -122,7 +122,14 @@ class StubCreatorGenerator
 
                 fn.ret  = getFinisherType(getMethodSignatureType(fn), fn.ret);
                 fn.args = args;
-                fn.expr = getBodyExpr(method.name, argArrayExpr);
+
+                //block mocking inlined methods
+                if (method.isInlined()) {
+                    var msg = 'Unable to mock inlined method `${method.name}()`. Use `--no-inline` compiler flag to mock inlined methods.';
+                    fn.expr = macro throw new hunit.exceptions.InvalidTestException($v{msg});
+                }else {
+                    fn.expr = getBodyExpr(method.name, argArrayExpr);
+                }
 
                 method.kind = FFun(fn);
             case _ : throw "Unexpected field type";

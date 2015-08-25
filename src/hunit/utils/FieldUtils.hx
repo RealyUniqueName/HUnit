@@ -41,6 +41,25 @@ class FieldUtils
 
 
     /**
+     * Check if field has `inline` accessor
+     *
+     */
+    static public function isInlined (field:Field) : Bool
+    {
+        if (field.access == null) return false;
+
+        for (access in field.access) {
+            switch (access) {
+                case AInline : return true;
+                case _       :
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * Create a copy of specified field.
      *
      */

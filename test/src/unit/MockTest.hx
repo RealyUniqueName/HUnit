@@ -1,5 +1,6 @@
 package unit;
 
+import hunit.exceptions.InvalidTestException;
 import hunit.exceptions.UnexpectedCallException;
 import hunit.mock.IMock;
 import hunit.TestCase;
@@ -10,6 +11,7 @@ class MockDummy<T> {
     public var item (default,null) : T;
     public function new (item:T) this.item = item;
     public function helloWorld () return 'Hello, world!';
+    public inline function thisOneIsInlined() trace('You should not see this');
 }
 
 
@@ -107,6 +109,30 @@ class MockTest extends TestCase
 
         assert.type(MockDummy, m);
         assert.type(IMock, m);
+    }
+
+
+    /**
+     * If user wants to mock inlined methods, HUnit should throw InvalidTestException
+     *
+     */
+    public function testMockingInlinedMethodsShouldThrowError () : Void
+    {
+        var m = mock(MockDummy, [String]).get();
+
+        try {
+            stub(m).thisOneIsInlined();
+            assert.fail('Stubbing inlined method should fail');
+        } catch (e:InvalidTestException) {
+            assert.success();
+        }
+
+        try {
+            expect(m).thisOneIsInlined();
+            assert.fail('Expecting inlined method should fail');
+        } catch (e:InvalidTestException) {
+            assert.success();
+        }
     }
 
 

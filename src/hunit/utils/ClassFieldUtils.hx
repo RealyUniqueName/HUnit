@@ -24,17 +24,33 @@ class ClassFieldUtils
 
         var kind = classField.kind.toFieldType(classField.type);
 
+        var access = [(classField.isPublic ? APublic : APrivate)];
+        if (classField.isInlined()) access.push(AInline);
+
         var field : Field =  {
             name   : classField.name,
             doc    : classField.doc,
-            access : classField.isPublic ? [ APublic ] : [ APrivate ],
+            access : access,
             kind   : kind,
-            pos  : classField.pos,
-            meta : classField.meta.get(),
+            pos    : classField.pos,
+            meta   : classField.meta.get(),
         }
 
         return field;
     }//function toField()
+
+
+    /**
+     * Check if field is inlined
+     *
+     */
+    static public function isInlined (field:ClassField) : Bool
+    {
+        return switch (field.kind) {
+            case FMethod(MethInline) : true;
+            case _                   : false;
+        }
+    }
 
 
     /**

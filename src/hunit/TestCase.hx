@@ -110,10 +110,6 @@ class TestCase
      */
     macro public function mock<T> (eThis:Expr, type:ExprOf<Class<T>>, typeParameters:ExprOf<Array<Class<Dynamic>>> = null) : ExprOf<MockBuilder<T>>
     {
-        if (!Context.getDefines().exists('no_inline')) {
-            Context.error('Mocking is not available without `--no-inline` compiler flag', Context.currentPos());
-        }
-
         var generator       = new MockTypeGenerator(type, typeParameters);
         var mockClassExpr   = generator.getTypeDefinition().toClassExpr();
         var builderTypePath = generator.getMockBuilder().getTypeDefinition().toTypePath();

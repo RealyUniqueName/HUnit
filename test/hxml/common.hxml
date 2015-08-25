@@ -1,7 +1,6 @@
 -cp src
 -cp test/src
 -main Test
---no-inline
 -lib tink_macro
 -lib exception
 -debug
