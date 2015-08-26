@@ -41,16 +41,16 @@ class ComplexTypeUtils
      */
     static public function toValidComplex (typeName:String) : ComplexType
     {
+        var params : Array<TypeParam> = [];
+        if (typeName.strHasTypeParameters()) {
+            var tpList = typeName.substring(typeName.indexOf('<') + 1, typeName.lastIndexOf('>'));
+            params = createTypeParameters(tpList);
+            typeName = typeName.substring(0, typeName.indexOf('<'));
+        }
+
         var pack : Array<String> = typeName.toString().split('.');
         var sub  = pack.pop();
         var name = pack.pop();
-
-        var params = [];
-        if (sub.strHasTypeParameters()) {
-            var tpList = sub.substring(sub.indexOf('<') + 1, sub.lastIndexOf('>'));
-            params = createTypeParameters(tpList);
-            sub = sub.substring(0, sub.indexOf('<'));
-        }
 
         if (name == null) {
             name = sub;

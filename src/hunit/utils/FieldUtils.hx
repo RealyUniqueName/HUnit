@@ -157,7 +157,7 @@ class FieldUtils
     {
         var copy : FunctionArg = {
             name : arg.name,
-            type : arg.type.copy() //no need to copy type at this moment
+            type : arg.type.copy()
         }
 
         if (arg.opt != null) {

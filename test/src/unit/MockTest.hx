@@ -12,6 +12,7 @@ class MockDummy<T> {
     public function new (item:T) this.item = item;
     public function helloWorld () return 'Hello, world!';
     public function withOptionalBasicType (intArg:Int = 1, boolArg:Null<Bool>, ?arg2:Float, ?boolArg:Bool = null) return intArg;
+    public function wilNullOfClass (nulLArg:Null<MockTest>) : Void {}
     public inline function thisOneIsInlined() trace('You should not see this');
 }
 
