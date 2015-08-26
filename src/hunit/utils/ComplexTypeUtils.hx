@@ -19,7 +19,93 @@ class ComplexTypeUtils
      */
     static public function copy (complexType:Null<ComplexType>) : Null<ComplexType>
     {
-        return (complexType == null ? null : complexType.toString().toComplex());
+        if (complexType == null) return null;
+
+        return complexType.toString().toValidComplex();
+    }
+
+
+    /**
+     * Check if this type represent one of [Int, Float, Bool]
+     *
+     */
+    static public function isBasicType (complexType:Null<ComplexType>) : Bool
+    {
+        return (complexType == null ? false : complexType.toType().isBasicType());
+    }
+
+
+    /**
+     * Convert string to complex type taking module name and type parameters into account.
+     *
+     */
+    static public function toValidComplex (typeName:String) : ComplexType
+    {
+        var pack : Array<String> = typeName.toString().split('.');
+        var sub  = pack.pop();
+        var name = pack.pop();
+
+        var params = [];
+        if (sub.strHasTypeParameters()) {
+            var tpList = sub.substring(sub.indexOf('<') + 1, sub.lastIndexOf('>'));
+            params = createTypeParameters(tpList);
+            sub = sub.substring(0, sub.indexOf('<'));
+        }
+
+        if (name == null) {
+            name = sub;
+            sub  = null;
+        //not a module name
+        } else if (name.charAt(0).toLowerCase() == name.charAt(0)) {
+            pack.push(name);
+            name = sub;
+            sub  = null;
+        }
+
+        return TPath({name:name, pack:pack, sub:sub, params:params});
+    }
+
+
+    /**
+     * Create list of type parameters based on string
+     *
+     */
+    static private function createTypeParameters (tpList:String) : Array<TypeParam>
+    {
+        var params : Array<String> = [];
+
+        var subCount = 0;
+        var start    = 0;
+
+        for (i in 0...tpList.length) {
+            switch (tpList.charAt(i)) {
+                case '<' : subCount++;
+                case '>' : subCount--;
+                case ',' :
+                    if (subCount == 0) {
+                        params.push(tpList.substring(start, i));
+                        start = i + 1;
+                    }
+                case _:
+            }
+        }
+        if (start < tpList.length) {
+            params.push(tpList.substr(start));
+        }
+
+        var result : Array<TypeParam> = params.map(function(p) return TPType(p.toValidComplex()));
+
+        return result;
+    }
+
+
+    /**
+     * Check if type name ins `str` specifies type parameters
+     *
+     */
+    static private function strHasTypeParameters (str:String) : Bool
+    {
+        return str.indexOf('<') >= 0;
     }
 
 }//class ComplexTypeUtils

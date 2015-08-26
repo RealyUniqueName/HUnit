@@ -18,6 +18,8 @@ using hunit.Utils;
 
 #if macro
 
+typedef TMTUtils = tink.macro.Types;
+
 typedef FSUtils  = hunit.utils.FileSystemUtils;
 typedef TMUtils  = hunit.utils.TestMacroUtils;
 typedef TUtils   = hunit.utils.TypeUtils;
@@ -29,6 +31,7 @@ typedef FUtils   = hunit.utils.FieldUtils;
 typedef CxTUtils = hunit.utils.ComplexTypeUtils;
 
 typedef TExprTools        = haxe.macro.ExprTools;
+typedef TTExprTools       = haxe.macro.TypedExprTools;
 typedef TComplexTypeTools = haxe.macro.ComplexTypeTools;
 typedef TTypeTools        = haxe.macro.TypeTools;
 typedef TMacroStringTools = haxe.macro.MacroStringTools;
@@ -37,8 +40,6 @@ typedef TPositionTools    = haxe.macro.PositionTools;
 
 typedef STUtils = StringTools;
 typedef CUtils  = haxe.macro.Context;
-
-typedef TMTUtils = tink.macro.Types;
 
 typedef HxFSUtils = sys.FileSystem;
 typedef HxFUtils  = sys.io.File;

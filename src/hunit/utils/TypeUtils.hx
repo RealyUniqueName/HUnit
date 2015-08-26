@@ -186,7 +186,7 @@ class TypeUtils
         var typePath : TypePath = {
             name   : name,
             pack   : pack,
-            params : parameters.map(function(t) return TPType(t.toComplexType())),
+            params : parameters.map(function(t) return TPType(t.toValidComplexType())),
             sub    : sub
         };
 
@@ -239,6 +239,41 @@ class TypeUtils
             case TInst(t, _) : return t.get().isMock();
             case _           : return false;
         }
+    }
+
+
+    /**
+     * Check if this type represent one of [Int, Float, Bool]
+     *
+     */
+    static public function isBasicType (type:Type) : Bool
+    {
+        return switch (type) {
+            case TAbstract(_.toString() => typeName, _): ['Int', 'Float', 'Bool', 'Void'].indexOf(typeName) >= 0;
+            case _: false;
+        }
+    }
+
+
+    /**
+     * Convert to complex type with special handling of `Null<StdTypes.*>` case
+     *
+     */
+    static public function toValidComplexType (type:Type) : ComplexType
+    {
+        switch (type) {
+            case TType(_.toString() => 'Null', _[0] => TAbstract(_.toString() => name, [])):
+                if (['Int', 'Bool', 'Float'].indexOf(name) >= 0) {
+                    return TPath({
+                        name   : 'Null',
+                        pack   : [],
+                        params : [TPType(TPath({name:name, pack:[], params:[]}))]
+                    });
+                }
+            case _:
+        }
+
+        return type.toComplexType();
     }
 
 }//class TypeUtils

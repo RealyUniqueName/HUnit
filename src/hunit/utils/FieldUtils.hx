@@ -77,7 +77,7 @@ class FieldUtils
             meta   : meta
         }
 
-        return field;
+        return copy;
     }
 
 
@@ -157,7 +157,7 @@ class FieldUtils
     {
         var copy : FunctionArg = {
             name : arg.name,
-            type : arg.type.copy()
+            type : arg.type.copy() //no need to copy type at this moment
         }
 
         if (arg.opt != null) {
@@ -165,6 +165,17 @@ class FieldUtils
         }
         if (arg.value != null) {
             copy.value = arg.value.copy();
+        }
+
+        if (copy.type.isBasicType()) {
+            switch (copy.type) {
+                case TPath(_.sub => name):
+                    copy.type = TPath({name:name, pack:[], params:[]});
+                case _:
+            }
+            if (copy.value != null) {
+                copy.opt = false;
+            }
         }
 
         return copy;

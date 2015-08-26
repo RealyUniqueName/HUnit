@@ -22,7 +22,7 @@ class ClassFieldUtils
             throw "Invalid TAnonymous";
         }
 
-        var kind = classField.kind.toFieldType(classField.type);
+        var kind = classField.toFieldType(classField.type);
 
         var access = [(classField.isPublic ? APublic : APrivate)];
         if (classField.isInlined()) access.push(AInline);
@@ -57,30 +57,31 @@ class ClassFieldUtils
      * Convert classField.kind to field.kind
      *
      */
-    static public function toFieldType (fieldKind:FieldKind, fieldType:Type) : FieldType
+    static public function toFieldType (classField:ClassField, fieldType:Type) : FieldType
     {
-        var kind : FieldType = null;
+        var fieldKind : FieldKind = classField.kind;
+        var kind      : FieldType = null;
         switch([ fieldKind, fieldType ]) {
             case [ FVar(read, write), ret ]:
 
                 kind = FProp(
                     varAccessToString(read, "get"),
                     varAccessToString(write, "set"),
-                    ret.toComplexType(),
+                    ret.toValidComplexType(),
                     null
                 );
 
             case [ FMethod(_), TFun(args, ret) ]:
-
                 kind = FFun({
                     args: [
-                        for (a in args) {
-                            name : a.name,
-                            opt  : a.opt,
-                            type : a.t.toComplexType(),
+                        for (i in 0...args.length) {
+                            name  : args[i].name,
+                            opt   : args[i].opt,
+                            type  : args[i].t.toValidComplexType(),
+                            value : classField.getArgumentExpr(i)
                         }
                     ],
-                    ret  : ret.toComplexType(),
+                    ret  : ret.toValidComplexType(),
                     expr : null,
                 });
 
@@ -95,13 +96,14 @@ class ClassFieldUtils
                                 for (argIndex in 0...args.length) {
                                     var a = args[argIndex];
                                     {
-                                        name : a.name,
-                                        opt  : a.opt,
-                                        type : a.t.toComplexType()//LazyTypes.getArgType(lazyId, argIndex),
+                                        name  : a.name,
+                                        opt   : a.opt,
+                                        type  : a.t.toValidComplexType(), //LazyTypes.getArgType(lazyId, argIndex),
+                                        value : classField.getArgumentExpr(argIndex)
                                     }
                                 }
                             ],
-                            ret  : ret.toComplexType(),//LazyTypes.getReturnType(lazyId),
+                            ret  : ret.toValidComplexType(),//LazyTypes.getReturnType(lazyId),
                             expr : null,
                         });
 
@@ -127,6 +129,36 @@ class ClassFieldUtils
             case AccInline        : "default";
             case AccRequire(_, _) : "default";
         }
+    }
+
+
+    /**
+     * Find default expression for specified argument
+     *
+     */
+    static public function getArgumentExpr (field:ClassField, index:Int) : Null<Expr>
+    {
+        var texpr = field.expr();
+        if (texpr == null) return null;
+
+        switch (field.expr().expr) {
+            case TFunction(_.args => args):
+                var arg = args[index];
+                if (arg.value != null) {
+                    return switch (arg.value) {
+                        case TInt(i)    : macro $v{i};
+                        case TFloat(s)  : macro $v{s};
+                        case TString(s) : macro $v{s};
+                        case TBool(b)   : macro $v{b};
+                        case TNull      : macro null;
+                        case TThis      : macro this;
+                        case TSuper     : macro super;
+                    }
+                }
+            case _:
+        }
+
+        return null;
     }
 
 }//class ClassFieldUtils

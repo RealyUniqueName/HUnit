@@ -195,8 +195,14 @@ class StubCreatorGenerator
      */
     private function getBodyExpr (method:String, arguments:Array<Expr>) : Expr
     {
-        return macro {
-            var args = [$a{arguments}].map(function(a) : hunit.match.Match<Dynamic> {
+        var eArgsArray : Array<Expr> = [];
+        eArgsArray.push(macro var argsArray:Array<hunit.match.Match<Dynamic>> = []);
+        for (i in 0...arguments.length) {
+            eArgsArray.push(macro argsArray.push(${arguments[i]}));
+        }
+
+        var block = macro {
+            var args = argsArray.map(function(a) : hunit.match.Match<Dynamic> {
                 if (a == null) {
                     return new hunit.match.AnyMatch();
                 } else {
@@ -205,6 +211,13 @@ class StubCreatorGenerator
             });
             return __hu_create($v{method}, args);
         }
+        switch (block.expr) {
+            case EBlock(exprs):
+                block.expr = EBlock(eArgsArray.concat(exprs));
+            case _:
+        }
+
+        return block;
     }
 
 
