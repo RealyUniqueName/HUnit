@@ -1,6 +1,7 @@
 package hunit.match;
 
 import hunit.match.Match;
+import hunit.mock.IMock;
 import hunit.Utils;
 import Type;
 
@@ -56,7 +57,12 @@ class EqualMatch<T> extends Match<T>
      */
     override private function shortCode () : String
     {
-        var code = Std.string(value).shortenString();
+        //avoid circular references while creating string representation of a mocked object
+        var code = switch (Type.typeof(value)) {
+            case TClass(_) if (Std.is(value, IMock)) : Type.getClassName(Type.getClass(value));
+            case _                                   : Std.string(value).shortenString();
+        }
+
 
         return (value.hasToString() ? '="$code"' : '=$code');
     }
