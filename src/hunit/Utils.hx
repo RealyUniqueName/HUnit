@@ -101,6 +101,24 @@ class Utils
 
 
     /**
+     * Equals Std.string() on every target except neko, wher Std.string() may cause infinite recursion if `value` contains circular references
+     *
+     */
+    static public function safeToString (value:Dynamic) : String
+    {
+        #if !neko
+            return Std.string(value);
+        #else
+            return switch (Type.typeof(value)) {
+                case TClass(String) : value;
+                case TClass(_)      : Type.getClassName(Type.getClass(value));
+                case _              : Std.string(value);
+            }
+        #end
+    }
+
+
+    /**
      * Get string representation of a `value`.
      *
      * If result string is too long, shorten it.
@@ -109,7 +127,7 @@ class Utils
      */
     static public function shortenQuote (value:Dynamic) : String
     {
-        var str = Std.string(value).shortenString();
+        var str = value.safeToString().shortenString();
 
         return (value.hasToString() ? '"$str"' : str);
     }
