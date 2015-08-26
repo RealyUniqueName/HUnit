@@ -54,7 +54,7 @@ class Stub
      * Expect this stub to be invoked `count` times
      *
      */
-    public function expect (count:CallCount, ?pos:PosInfos) : Expect
+    public function expect (count:CallCount) : Expect
     {
         var expect = new Expect(
             mockData,
