@@ -78,6 +78,19 @@ class MetaTest extends TestCase
         assert.equal(2, report.testCount);
     }
 
+
+    /**
+     * Tests with @depends meta should run only if passed all tests in @depends() list
+     *
+     */
+    public function testDependencies () : Void
+    {
+        var report = Test.self(new DependsDummyTest());
+
+        assert.equal(4, report.testCount);
+        assert.equal(1, report.skipped.length);
+    }
+
 }//class MetaTest
 
 
@@ -109,4 +122,16 @@ private class TestDummyTest extends TestCase
     public function withTestMeta () assert.success();
 
     public function testWithTestPrefix () assert.success();
+}
+
+
+private class DependsDummyTest extends TestCase
+{
+    @depends('testSuccess', 'testFail')
+    public function testDependsFail () assert.success();
+    @depends('testSuccess')
+    public function testDependsSuccess () assert.success();
+
+    public function testSuccess () assert.success();
+    public function testFail () assert.fail();
 }

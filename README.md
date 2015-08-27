@@ -447,6 +447,8 @@ Method is considered to be a test if marked with this meta.
 Assign test to specified groups.
 * `@incomplete('Because something is not implemented')`  
 Mark test as incomplete. This meta will add warning to test report.
+* `@depends('testAnotherThing', 'testDifferentThing')`  
+If `testAnotherThing` fails or `testDifferentThig` fails, then test with this meta will be skipped. All these tests must be in one TestCase.
 
 
 Limitations

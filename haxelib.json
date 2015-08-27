@@ -4,7 +4,7 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.5",
+    "version"      : "0.1.8",
     "releasenote"  : "Various fixes for type resolving in mocks generation process. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],

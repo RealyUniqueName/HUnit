@@ -7,6 +7,7 @@ import haxe.Constraints.Function;
 import haxe.Log;
 import haxe.PosInfos;
 import haxe.Timer;
+import hunit.exceptions.InvalidTestException;
 import hunit.exceptions.NoExpectedException;
 import hunit.exceptions.TestFailException;
 import hunit.exceptions.UnexpectedException;
@@ -128,23 +129,37 @@ class TestSuite
 
         var total = 1;
         for (testCase in cases.filterCases(exclude)) {
-            var data  = new TestCaseData(testCase);
+            try {
+                var data  = new TestCaseData(testCase);
 
-            onCaseBegin(testCase, data);
+                onCaseBegin(testCase, data);
 
-            if (data.totalTestCount == 0) {
-                var cls = Type.getClassName(Type.getClass(testCase));
-                report.addWarning(testCase, '<none>', new NoTestsWarning('$cls does not contain any tests.'));
-            } else {
-                for (test in data.getTests(groups, excludeGroups)) {
-                    if (total % 80 == 0) another80Tests();
+                if (data.totalTestCount == 0) {
+                    var cls = Type.getClassName(Type.getClass(testCase));
+                    report.addWarning(testCase, '<none>', new NoTestsWarning('$cls does not contain any tests.'));
 
-                    executeTest(testCase, test);
-                    total ++;
+                } else {
+                    var runQueue = data.getTests(groups, excludeGroups);
+
+                    while (runQueue.length > 0) {
+                        var test = runQueue.shift();
+
+                        if (total % 80 == 0) another80Tests();
+
+                        var passed = executeTest(testCase, test);
+                        if (!passed) {
+                            runQueue = skipDependent(testCase, test, runQueue);
+                        }
+
+                        total ++;
+                    }
                 }
-            }
 
-            onCaseEnd(testCase);
+                onCaseEnd(testCase);
+            } catch(e:Dynamic) {
+                printer('E');
+                report.addFail(testCase, '<none>', Exception.wrap(e));
+            }
         }
         report.endTime = Timer.stamp();
 
@@ -227,14 +242,16 @@ class TestSuite
 
     /**
      * Run tests from `testCase`
-     *
+     * Returns `true` if test passed.
      */
-    private function executeTest (testCase:TestCase, test:TestData) : Void
+    private function executeTest (testCase:TestCase, test:TestData) : Bool
     {
         executeTestCallStack = CallStack.callStack();
 
         beforeTestStart(testCase, test.name);
         testCase.setup();
+
+        var passed = false;
 
         try {
             try {
@@ -248,6 +265,7 @@ class TestSuite
 
             if (!state.warned) {
                 state.success();
+                passed = true;
                 printer('.');
             } else {
                 printer('W');
@@ -256,11 +274,13 @@ class TestSuite
 
         } catch (e:Exception) {
             state.fail(e);
-            printer('F');
+            printer(Std.is(e, InvalidTestException) ? 'E' : 'F');
         }
 
         testCase.tearDown();
         afterTestDone(testCase);
+
+        return passed;
     }
 
 
@@ -320,6 +340,24 @@ class TestSuite
         if (!test.isIncomplete && !state.madeAssertions()) {
             state.warn(new NoAssertionsWarning('This test did not perform any assertions'));
         }
+    }
+
+
+    /**
+     * Remove tests which depend on `failed` one from `runQueue`
+     *
+     */
+    private function skipDependent (testCase:TestCase, failed:TestData, runQueue:Array<TestData>) : Array<TestData>
+    {
+        var dependent : Array<TestData> = TestCaseData.getDependent(failed, runQueue);
+
+        for (test in dependent) {
+            printer('S');
+            runQueue.remove(test);
+            report.addSkip(testCase, test.name, test.depends);
+        }
+
+        return runQueue;
     }
 
 

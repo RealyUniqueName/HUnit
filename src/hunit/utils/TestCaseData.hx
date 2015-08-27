@@ -4,6 +4,7 @@ import haxe.Constraints;
 import haxe.rtti.Rtti;
 import haxe.rtti.CType;
 import haxe.unit.TestCase;
+import hunit.exceptions.CircularTestDependencyException;
 import hunit.TestCase;
 
 using StringTools;
@@ -17,7 +18,8 @@ typedef TestData = {
     callback      : Function,
     isIncomplete  : Bool,
     incompleteMsg : String,
-    groups        : Array<String>
+    groups        : Array<String>,
+    depends       : Array<String>
 }
 
 
@@ -39,6 +41,68 @@ class TestCaseData
     private var rtti : Classdef;
     /** list of tests in test case */
     private var tests : Array<TestData>;
+
+
+    /**
+     * Get list of test which depend on `test`
+     *
+     */
+    static public function getDependent (test:TestData, list:Array<TestData>, dependencyStack:Array<TestData> = null) : Array<TestData>
+    {
+        var dependent : Array<TestData> = [];
+
+        if (dependencyStack != null) {
+            if (dependencyStack.indexOf(test) >= 0) {
+                throw new CircularTestDependencyException('Tests with circular dependancies detected. Check @depends() metas.');
+            }
+            dependencyStack.push(test);
+        }
+
+        for (t in list) {
+            if (t == test) continue;
+
+            if (t.depends.indexOf(test.name) >= 0) {
+                dependent.push(t);
+                var subStack = (dependencyStack == null ? null : dependencyStack.copy());
+                dependent = dependent.concat(getDependent(t, list, subStack));
+            }
+        }
+
+        return dependent;
+    }
+
+
+    /**
+     * Sort list so that dependent tests moved to the end of list
+     *
+     */
+    static private function sortByDependencies (list:Array<TestData>) : Array<TestData>
+    {
+        if (list.length == 0) return [];
+
+        var result : Array<TestData> = list.copy();
+        result.sort(function(a, b) return a.depends.length - b.depends.length);
+        if (result[0].depends.length > 0) {
+            throw new CircularTestDependencyException("Can't find tests without dependencies.");
+        }
+
+        var idx = 0;
+        // var current : TestData;
+        var dependent : Array<TestData>;
+        while (idx < list.length) {
+            dependent = getDependent(result[idx], result, []);
+
+            //move to the end
+            for (test in dependent) {
+                result.remove(test);
+                result.push(test);
+            }
+
+            idx ++;
+        }
+
+        return result;
+    }
 
 
     /**
@@ -70,7 +134,7 @@ class TestCaseData
             result = result.filter(function(t) return !testIsInGroups(t, excludeGroups));
         }
 
-        return result;
+        return sortByDependencies(result);
     }
 
 
@@ -101,15 +165,18 @@ class TestCaseData
         var isIncomplete = false;
         var groups        : Array<String> = [];
         var incompleteMsg : String = null;
+        var depends       : Array<String> = [];
 
         for (meta in field.meta) {
             switch (meta.name) {
                 case 'group' :
-                    var mGroups = meta.params.map(function(v) return v.replace('"', ''));
+                    var mGroups = meta.params.map(StringTools.replace.bind(_, '"', ''));
                     groups = groups.concat(mGroups);
                 case 'incomplete' :
                     isIncomplete = true;
-                    incompleteMsg = meta.params.map(function(v) return v.replace('"', '')).join('; ');
+                    incompleteMsg = meta.params.map(StringTools.replace.bind(_, '"', '')).join('; ');
+                case 'depends' :
+                    depends = meta.params.map(StringTools.replace.bind(_, '"', ''));
                 case _ :
             }
         }
@@ -119,7 +186,8 @@ class TestCaseData
             callback      : callback,
             isIncomplete  : isIncomplete,
             incompleteMsg : incompleteMsg,
-            groups        : groups
+            groups        : groups,
+            depends       : depends
         }
     }
 
@@ -159,5 +227,6 @@ class TestCaseData
 
         return testCase = value;
     }
+
 
 }

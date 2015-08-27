@@ -3,6 +3,7 @@ package hunit.report;
 import haxe.PosInfos;
 import hunit.report.IReportWriter;
 import hunit.report.TestWarning;
+import hunit.report.TestSkip;
 import hunit.TestCase;
 import hunit.warnings.Warning;
 
@@ -33,6 +34,8 @@ class TestReport
     public var warnings (default,null) : List<TestWarning>;
     /** passed tests without warnings */
     public var successful (default,null) : List<TestSuccess>;
+    /** List of skipped tests */
+    public var skipped (default,null) : List<TestSkip>;
     /** Get finished tests count */
     public var testCount (get,never) : Int;
     /** Total assertions performed */
@@ -49,6 +52,7 @@ class TestReport
         fails      = new List();
         warnings   = new List();
         successful = new List();
+        skipped    = new List();
 
         this.writer = writer;
     }
@@ -96,6 +100,20 @@ class TestReport
 
 
     /**
+     * Add skipped test
+     *
+     */
+    public function addSkip (testCase:TestCase, test:String, depends:Array<String>) : Void
+    {
+        skipped.add({
+            caseName : testCase.getClass().getClassName(),
+            testName : test,
+            depends  : depends
+        });
+    }
+
+
+    /**
      * Output report data
      *
      */
@@ -116,13 +134,17 @@ class TestReport
         var passed = warned + successful.length;
         var total  = failed + passed;
 
+        var failedMsg  = (failed == 0 ? '' : ', $failed failure' + (failed == 1 ? '' : 's'));
+        var warnedMsg  = (warned == 0 ? '' : ', $warned warning' + (warned == 1 ? '' : 's'));
+        var skippedMsg = (skipped.length == 0 ? '' : ', ${skipped.length} skipped');
+
         var summary = 'Time: $spentTime seconds.\n\n';
-        if (fails.length == 0 && warnings.length == 0) {
+        if (fails.length == 0 && warnings.length == 0 && skipped.length == 0) {
             summary += 'OK ($total tests, $assertionCount assertions)';
         } else if (fails.length == 0) {
-            summary += 'OK, but with risky tests! ($total tests, $assertionCount assertions, $warned warnings)';
+            summary += 'OK, but with risky tests! ($total tests, $assertionCount assertions${warnedMsg}${skippedMsg})';
         } else {
-            summary += 'FAILURES! ($total tests, $failed failures, $warned warnings)';
+            summary += 'FAILURES! ($total tests${failedMsg}${warnedMsg}${skippedMsg})';
         }
 
         return summary;
@@ -147,7 +169,7 @@ class TestReport
      */
     private function get_testCount () : Int
     {
-        return  successful.length + warnings.length + fails.length;
+        return  successful.length + warnings.length + fails.length + skipped.length;
     }
 
 }//class TestReport
