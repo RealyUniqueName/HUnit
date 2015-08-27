@@ -13,6 +13,17 @@ import hunit.match.EqualMatch;
  */
 abstract Match<T>(RealMatch<T>) from RealMatch<T> to RealMatch<T>
 {
+
+    /**
+     * Create Match from any value
+     *
+     */
+    @:from static private function fromMatcher<T> (value:RealMatch<T>) : Match<T>
+    {
+        return value;
+    }
+
+
     /**
      * Create Match from any value
      *

@@ -296,4 +296,17 @@ class MatchTest extends TestCase
         }
     }
 
+
+    /**
+     * Make sure hunit.Match<Dynamic> won't wrap hunit.match.Match<NonDynamic> into another matcher
+     *
+     */
+    public function testAbstractMatchOfDynamicFromRealMatch () : Void
+    {
+        var src = match.type(MatchTest);
+        var abstractMatch : hunit.Match<Dynamic> = src;
+
+        assert.equal(src, cast abstractMatch);
+    }
+
 }//class MatchTest

@@ -166,10 +166,10 @@ class TestCase
      * Assert that test will throw exception which match specified Match
      *
      */
-    public function expectException (match:Match<Dynamic> = null, ?pos:PosInfos) : Void
+    public function expectException<T> (match:Match<T> = null, ?pos:PosInfos) : Void
     {
         if (match == null) {
-            match = new AnyMatch<Dynamic>();
+            match = new AnyMatch<T>();
         }
 
         __hu_state.expectedException = new ExpectedExceptionData(match, pos);
