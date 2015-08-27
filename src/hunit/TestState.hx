@@ -124,6 +124,16 @@ class TestState
 
 
     /**
+     * Add `msg` to test suite summary report
+     *
+     */
+    public function notice (msg:String, pos:PosInfos) : Void
+    {
+        report.addNotice(testCase, testName, msg, pos);
+    }
+
+
+    /**
      * Exceptions happened before test ended, which potentially will fail test unless handled elsewhere
      *
      */

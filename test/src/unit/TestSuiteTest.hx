@@ -27,6 +27,18 @@ class TestSuiteTest extends TestCase
         assert.equal(1, suite.report.cases.length);
     }
 
+
+    /**
+     * Check notices added to report
+     *
+     */
+    public function testNotices () : Void
+    {
+        var notices = Test.self(new NoticeDummyTest()).notices;
+
+        assert.equal(1, notices.length);
+    }
+
 }//class TestSuiteTest
 
 
@@ -39,4 +51,12 @@ class ExcludeDummyTest extends TestCase
 class NoExcludeDummyTest extends TestCase
 {
     public function testStuff() assert.success();
+}
+
+class NoticeDummyTest extends TestCase {
+    public function testStuff()
+    {
+        notice('hello');
+        assert.success();
+    }
 }

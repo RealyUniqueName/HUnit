@@ -4,6 +4,7 @@ import haxe.PosInfos;
 import hunit.report.IReportWriter;
 import hunit.report.TestWarning;
 import hunit.report.TestSkip;
+import hunit.report.TestNotice;
 import hunit.TestCase;
 import hunit.warnings.Warning;
 
@@ -36,6 +37,8 @@ class TestReport
     public var successful (default,null) : List<TestSuccess>;
     /** List of skipped tests */
     public var skipped (default,null) : List<TestSkip>;
+    /** Messages added with `TestCase.notice()` */
+    public var notices (default,null) : List<TestNotice>;
     /** Get finished tests count */
     public var testCount (get,never) : Int;
     /** Total assertions performed */
@@ -53,6 +56,7 @@ class TestReport
         warnings   = new List();
         successful = new List();
         skipped    = new List();
+        notices    = new List();
 
         this.writer = writer;
     }
@@ -109,6 +113,21 @@ class TestReport
             caseName : testCase.getClass().getClassName(),
             testName : test,
             depends  : depends
+        });
+    }
+
+
+    /**
+     * Add message from `TestCase.notice()`
+     *
+     */
+    public function addNotice (testCase:TestCase, test:String, message:String, pos:PosInfos) : Void
+    {
+        notices.add({
+            caseName : testCase.getClass().getClassName(),
+            testName : test,
+            message  : message,
+            pos      : pos
         });
     }
 

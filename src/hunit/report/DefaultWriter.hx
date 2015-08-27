@@ -38,6 +38,16 @@ class DefaultWriter implements IReportWriter
      */
     public function write (report:TestReport) : Void
     {
+        if (report.notices.length > 0) {
+            printer('NOTICES:\n');
+
+            for (notice in report.notices) {
+                writeNotice(notice);
+            }
+        }
+
+        itemsWriteCounter = 0;
+
         if (report.fails.length > 0) {
             printer('FAILURES:\n\n');
 
@@ -109,21 +119,33 @@ class DefaultWriter implements IReportWriter
 
 
     /**
+     * Write single notice
+     *
+     */
+    private function writeNotice (item:TestNotice) : Void
+    {
+        writeItem(item.caseName, item.testName, item.message, item.pos, true);
+    }
+
+
+    /**
      * Render single item of a report
      *
      */
-    private function writeItem (caseName:String, test:String, message:String, pos:Null<PosInfos>) : Void
+    private function writeItem (caseName:String, test:String, message:String, pos:Null<PosInfos>, addPosToTestName = false) : Void
     {
         itemsWriteCounter ++;
 
         var idx = itemsWriteCounter;
 
-        printer('$idx) $caseName::$test()\n');
+        var posStr = (pos == null ? '' : '${pos.fileName}:${pos.lineNumber}');
+
+        printer('$idx) $caseName::$test()' + (addPosToTestName ? ' at $posStr' : '') + '\n');
         printer('$message\n');
         printer('\n');
 
-        if (pos != null) {
-            printer('\t${pos.fileName}:${pos.lineNumber}\n');
+        if (pos != null && !addPosToTestName) {
+            printer('\t$posStr\n');
             printer('\n');
         }
     }

@@ -177,6 +177,16 @@ class TestCase
 
 
     /**
+     * Show `msg` in test suite report
+     *
+     */
+    public function notice (msg:String, ?pos:PosInfos) : Void
+    {
+        __hu_state.notice(msg, pos);
+    }
+
+
+    /**
      * Setter `match`
      *
      */

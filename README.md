@@ -121,6 +121,9 @@ class SomeFeatureTest extends hunit.TestCase
     /** Perform some cleaning after last test in this test case */
     override public function tearDownTestCase () : Void { }
 
+    /** Show `msg` in test suite report without affecting tests results */
+    public function notice (msg:String) : Void { }
+
     /**
      * Test methods should start with `test` prefix or should be marked with `@test` meta
      */
