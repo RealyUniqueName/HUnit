@@ -12,7 +12,7 @@ Contents
 * [Test cases](#test-cases)
 * [Test reports](#test-reports)
 * [Mocking](#mocking)
-* [Mocking types with @:autoBuild macros](#mocking-types-with-autoBuild-macros)
+* [Mocking types with @:autoBuild macros](#mocking-types-with-autobuild-macros)
 * [Stubbing](#stubbing)
 * [Verifying method calls](#verifying-method-calls)
 * [Validating exceptions](#validating-exceptions)
