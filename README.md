@@ -12,6 +12,7 @@ Contents
 * [Test cases](#test-cases)
 * [Test reports](#test-reports)
 * [Mocking](#mocking)
+* [Mocking types with @:autoBuild macros](#mocking-types-with-autoBuild-macros)
 * [Stubbing](#stubbing)
 * [Verifying method calls](#verifying-method-calls)
 * [Validating exceptions](#validating-exceptions)
@@ -27,10 +28,10 @@ Why yet another unit testing framework?
 Indeed, there are great frameworks like [utest](http://lib.haxe.org/p/utest/) and [munit](http://lib.haxe.org/p/munit/) already.
 There is no strong reason for creating another one.
 Short story:
-In the beginning I was fine with standard `haxe.unit` package. Then with my project growth I need some more functionality, 
-which I implemented in some minor extensions for `haxe.unit`. At some point I became in need of mocking. [Mockatoo](http://lib.haxe.org/p/mockatoo/) 
-was great, but did not work on all targets, so i implemented simple mocking. And so on, and so forth...  
-Suddenly I looked at all that stuff and saw almost all `haxe.unit` code overriden by my 'extensions'. 
+In the beginning I was fine with standard `haxe.unit` package. Then with my project growth I need some more functionality,
+which I implemented in some minor extensions for `haxe.unit`. At some point I became in need of mocking. [Mockatoo](http://lib.haxe.org/p/mockatoo/)
+was great, but did not work on all targets, so i implemented simple mocking. And so on, and so forth...
+Suddenly I looked at all that stuff and saw almost all `haxe.unit` code overriden by my 'extensions'.
 So I decided to separate them into standalone unit testing framework.
 
 
@@ -134,12 +135,12 @@ class SomeFeatureTest extends hunit.TestCase
         assert.equal(expected, actual, '2-1 and 1 should be equal');
     }
 
-    @test 
+    @test
     public function someOtherStuff()
     {
         var expected = 'hello';
         var actual   = 'hell' + 'o';
-        assert.equal(expected, actual);   
+        assert.equal(expected, actual);
     }
 }
 ```
@@ -152,8 +153,8 @@ or json or to do whatever you want with tests results.
 
 Mocking
 -----------------
-Right now mocking is only supported for classes and interfaces.  
-Abstracts and typedefs are candidates to be implemented.  
+Right now mocking is only supported for classes and interfaces.
+Abstracts and typedefs are candidates to be implemented.
 Let's imagine we want to mock following class:
 ```haxe
 class MyClass<T> {
@@ -194,11 +195,16 @@ class MyTest extends hunit.TestCase
 }
 ```
 
+Mocking types with @:autoBuild macros
+-----------------
+If you are trying to mock some type which has `@:autoBuild` macros you can experience random bugs and unexpected behavior.
+To avoid such issues check for `@:mock` meta in your macros and skip type building for types whith this meta.
+
 
 Stubbing
 -----------------
 So you want to stub some methods? Easy!
-```haxe 
+```haxe
 public function testStubbing ()
 {
     var m = mock(MyClass, [String]).create('Hello');
@@ -241,7 +247,7 @@ public function testStubbing ()
     expect(m).changeValue().unstub();
 }
 ```
-You can pass matchers instead of exact values to stubbed method arguments. Read below for more on matchers.  
+You can pass matchers instead of exact values to stubbed method arguments. Read below for more on matchers.
 By default stubbed methods return `null` or type specific default value for `Int`, `Bool`, `Float` on static platforms.
 
 
@@ -252,7 +258,7 @@ If you need to ensure your tested unit calls some methods, you can use `expect()
 public function testInvocation ()
 {
     var m = mock(MyClass, [String]).create('Hello');
-    
+
     //test will fail if `changeValue()` method of `m` will not be executed with 'World' argument
     expect(m).changeValue('World');
 
@@ -276,8 +282,8 @@ public function testInvocation ()
     }
 }
 ```
-You can pass matchers instead of exact values to expected arguments, return values or exception. Read below for more on matchers.  
-Specify the amount of expected calls using these methods:  
+You can pass matchers instead of exact values to expected arguments, return values or exception. Read below for more on matchers.
+Specify the amount of expected calls using these methods:
 
 * `any()` (default) Never fail because of invocations count;
 * `once()` Test passes if method will be called one time only;
@@ -290,7 +296,7 @@ Validating exceptions
 -----------------
 If you want to be sure some unit throws exception.
 ```
-public function testMethodThrowsException () 
+public function testMethodThrowsException ()
 {
     expectException('Terrible error');
 
@@ -305,16 +311,16 @@ Instead of exact value you can pass matchers to `expectException()`.  Read below
 
 Assertions
 -----------------
-These are implemented assertions, which you can invoke on `assert` property of `hunit.TestCase`.  
-Use `message` argument to print custom message if assertion fails.  
+These are implemented assertions, which you can invoke on `assert` property of `hunit.TestCase`.
+Use `message` argument to print custom message if assertion fails.
 Don't pass `pos` argument unless you know what you're doing.
 ```haxe
 /** Validate `value` against matcher. More on matchers below. */
 assert.match<T> (match:Match<T>, value:T, message:String = null, ?pos:PosInfos);
 
-/** 
- * Success if `expected` and `actual` are equal. 
- * Compares enums with `Type.enumEq()`, callbacks with `Reflect.compareMethods()` and everything else with `==`. 
+/**
+ * Success if `expected` and `actual` are equal.
+ * Compares enums with `Type.enumEq()`, callbacks with `Reflect.compareMethods()` and everything else with `==`.
  */
 assert.equal<T> (expected:T, actual:T, message:String = null, ?pos:PosInfos);
 
@@ -338,7 +344,7 @@ assert.isFalse (value:Bool, message:String = null, ?pos:PosInfos);
 
 /** Success if `pattern` regexp match `value`*/
 assert.regexp (pattern:EReg, value:String, message:String = null, ?pos:PosInfos);
- 
+
 /**
  * Success if `expected` and `actual` are similar objects/arrays/maps.
  *
@@ -372,8 +378,8 @@ assert.success (?pos:PosInfos);
 
 Matchers
 -----------------
-Matchers are used to check if verified values match expected values.  
-They are available as methods of `match` property of `hunit.TestCase`. 
+Matchers are used to check if verified values match expected values.
+They are available as methods of `match` property of `hunit.TestCase`.
 
 You can use matchers as arguments for stubbed or expected method calls, expected method result and expected exceptions:
 ```haxe
@@ -391,11 +397,11 @@ expect(m).changeValue().returns(match.notEqual('World'));
 expect(m).changeValue().throws(match.any());
 
 //expect raising object exception with field `message` which is equal with 'Terrible error' and `code` field not equal with `10`
-expectException(match.similar( 
-    { 
-        message : 'Terrible error', 
-        code    : match.notEqual(10) 
-    } 
+expectException(match.similar(
+    {
+        message : 'Terrible error',
+        code    : match.notEqual(10)
+    }
 ));
 
 //you can also chain matchers so that verified value will match only if all matchers are satisfied
@@ -429,34 +435,34 @@ match.callback<T> (verify:T->Bool);
 
 Compilation flags
 -----------------
-* `-main HUnit`  
+* `-main HUnit`
 If your test suite does not need any special configuration, you can use `HUnit` as main class for test suite.
-* `-D HUNIT_TEST_DIR=path/to/dir`  
-Adds all tests in path/to/dir to test suite if combined with `-main HUnit`.  
+* `-D HUNIT_TEST_DIR=path/to/dir`
+Adds all tests in path/to/dir to test suite if combined with `-main HUnit`.
 Path should be specified relative to current working directory from which `haxe` compiler is executed.
-* `-D HUNIT_EXCLUDE=some.tests,some.SingleTest,<...>`  
+* `-D HUNIT_EXCLUDE=some.tests,some.SingleTest,<...>`
 Exclude specified packages and/or classes from test suite
-* `-D HUNIT_GROUP=group1,group2,<...>`  
+* `-D HUNIT_GROUP=group1,group2,<...>`
 Run tests assigned to specified groups only. Tests can be assigned to some groups by adding meta `@group(group1,group4,group8)` to test methods.
-* `-D HUNIT_EXCLUDE_GROUP=group1,group2,<...>`  
+* `-D HUNIT_EXCLUDE_GROUP=group1,group2,<...>`
 Do not run tests assigned to specified groups.
 
 
 Meta for test methods
 ---------------------
-* `@test`  
+* `@test`
 Method is considered to be a test if marked with this meta.
-* `@group('group1', 'group2', <...>)`  
+* `@group('group1', 'group2', <...>)`
 Assign test to specified groups.
-* `@incomplete('Because something is not implemented')`  
+* `@incomplete('Because something is not implemented')`
 Mark test as incomplete. This meta will add warning to test report.
-* `@depends('testAnotherThing', 'testDifferentThing')`  
+* `@depends('testAnotherThing', 'testDifferentThing')`
 If `testAnotherThing` fails or `testDifferentThig` fails, then test with this meta will be skipped. All these tests must be in one TestCase.
 
 
 Limitations
 -----------
 It's not allowed to stub or expect `toString()` methods. HXCPP does not allow methods named `toString()` to return values
-other than strings, while HUnit needs to return another type to chain configuration methods for stubs and expects. 
+other than strings, while HUnit needs to return another type to chain configuration methods for stubs and expects.
 If you really need to operate `toString()` create another method like `asString()` and use it.
 

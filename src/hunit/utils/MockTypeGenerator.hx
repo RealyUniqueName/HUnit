@@ -96,7 +96,10 @@ class MockTypeGenerator
             pos    : Context.currentPos(),
             kind   : getTargetType().getDescendantTypeDefKind(getTargetTypeParameters(), ['hunit.mock.IMock'.getType()]),
             fields : getMockFields(),
-            meta   : [{name:':hack', pos:Context.currentPos()}]
+            meta   : [
+                {name:':hack', pos:Context.currentPos()},
+                {name:':mock', pos:Context.currentPos()}
+            ]
         }
         definedTypes.set(targetPackName, definedType);
 
