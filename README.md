@@ -49,7 +49,7 @@ Features
 Installation
 -----------------
 ```
-haxelib git hunit https://github.com/RealyUniqueName/HUnit.git
+haxelib install hunit
 ```
 
 
