@@ -11,7 +11,6 @@ using hunit.utils.Value;
  *
  */
 @:access(hunit.call.Stub)
-@:autoBuild(hunit.uitls.TestMacroUtils.buildFinisherReturs())
 class StubFinisher<SIGNATURE,RETURNS>
 {
     /** Modified stub */
@@ -44,7 +43,7 @@ class StubFinisher<SIGNATURE,RETURNS>
         return this;
     }
 
-// #if macro
+
     /**
      * Set return value
      *
@@ -58,7 +57,7 @@ class StubFinisher<SIGNATURE,RETURNS>
 
         return this;
     }
-// #end
+
 
     /**
      * Make this stub invocation throw an `exception`
