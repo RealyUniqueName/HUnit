@@ -103,13 +103,6 @@ class MockTypeGenerator
         }
         definedTypes.set(targetPackName, definedType);
 
-// for (field in definedType.fields) {
-//     if (field.name == 'withOptionalBasicType') switch (field.kind) {
-//         case FFun(_.args[0].type => at) : trace(at);
-//         case _:
-//     }
-// }
-
         Context.defineType(definedType);
     }
 

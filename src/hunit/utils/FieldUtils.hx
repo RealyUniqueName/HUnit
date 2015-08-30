@@ -118,7 +118,7 @@ class FieldUtils
             case FFun(fn):
                 copy = FFun({
                     args   : fn.args.map(function(a:FunctionArg) return a.copyFunctionArg()),
-                    ret    : fn.ret.copy(),
+                    ret    : fn.ret, //.copy(),
                     expr   : fn.expr.copy(),
                     params : (fn.params == null ? null : fn.params.map(function(tpd:TypeParamDecl) return tpd.copyTypeParamDecl()))
                 });
@@ -157,7 +157,7 @@ class FieldUtils
     {
         var copy : FunctionArg = {
             name : arg.name,
-            type : arg.type.copy()
+            type : arg.type //.copy()
         }
 
         if (arg.opt != null) {
