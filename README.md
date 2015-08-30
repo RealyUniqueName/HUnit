@@ -258,6 +258,8 @@ If you need to ensure your tested unit calls some methods, you can use `expect()
 public function testInvocation ()
 {
     var m = mock(MyClass, [String]).create('Hello');
+    //Or if you want your test to fail if any method except expected one is invoked, add `strict()`:
+    var m = mock(MyClass, [String]).strict().create('Hello');
 
     //test will fail if `changeValue()` method of `m` will not be executed with 'World' argument
     expect(m).changeValue('World');
