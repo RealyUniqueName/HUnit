@@ -191,7 +191,7 @@ class Utils
                 textField.autoSize = flash.text.TextFieldAutoSize.LEFT;
                 flash.Lib.current.addChild(textField);
             }
-            textField.appendText(v);
+            textField.appendText(value);
         #end
     }
     #end

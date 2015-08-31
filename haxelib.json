@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.11",
-    "releasenote"  : "@:mock meta; bugfixes",
+    "version"      : "0.1.12",
+    "releasenote"  : "Bugfix traces in flash. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
