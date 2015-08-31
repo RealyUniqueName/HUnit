@@ -30,6 +30,7 @@ using hunit.Utils;
  */
 @:access(hunit.mock.IMock)
 @:rtti
+@:keepSub
 class TestCase
 {
     /** Creates patterns for mocked methods' arguments */
