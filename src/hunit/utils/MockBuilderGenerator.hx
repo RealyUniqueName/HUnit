@@ -81,7 +81,6 @@ class MockBuilderGenerator
     {
         var mockDefinition  = mockGenerator.getTypeDefinition();
         var mockComplexType = mockDefinition.toComplexType();
-        var mockClassExpr   = mockDefinition.toClassExpr();
         var constructorArgs = mockGenerator.getTypeDefinition().toType().getConstructorArgs();
 
         var def = macro class Dummy {
@@ -106,14 +105,12 @@ class MockBuilderGenerator
         var createField = def.fields[0];
         switch (createField.kind) {
             case FFun(fn):
+                var mockTypePath         = mockDefinition.toTypePath();
                 var constructorArgsExprs = constructorArgs.map(function(a) return macro $i{a.name});
-
+                constructorArgsExprs.unshift(macro createMockData());
                 fn.args = constructorArgs;
                 fn.expr = macro {
-                    var args : Array<Dynamic> = [$a{constructorArgsExprs}];
-                    var instance = Type.createInstance($mockClassExpr, args);
-                    assignMockData(instance);
-                    return instance;
+                    return new $mockTypePath($a{constructorArgsExprs});
                 }
 
                 createField.kind = FFun(fn);

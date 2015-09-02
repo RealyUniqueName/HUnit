@@ -30,6 +30,8 @@ class MockTypeGenerator
     private var targetTypeParameters : Array<Type>;
     /** cached instance of `MockBuilderGenerator` */
     private var mockBuilder : MockBuilderGenerator;
+    /** To be able to retreive constructor arguments of parametrized types */
+    private var extendedType : Type;
 
 
     /**
@@ -44,6 +46,13 @@ class MockTypeGenerator
 
         if (targetType.countTypeParameters() != targetTypeParameters.length) {
             Context.error('Amount of type parameters does not match with type definition', Context.currentPos());
+        }
+
+        //override parametrized classes to get final types
+        if (targetTypeParameters.length > 0 && !targetType.isInterface()) {
+            extendedType = targetType.extendWith(targetTypeParameters);
+        } else {
+            extendedType = targetType;
         }
     }
 
@@ -187,13 +196,30 @@ class MockTypeGenerator
     {
         var definition = macro class Dummy {
             private var __hu_mock__ : hunit.mock.MockData;
-            /** mock constructor for interfaces */
-            public function new () {}
+            public function new (mockData:hunit.mock.MockData)
+            {
+                __hu_mock__ = mockData;
+            }
         }
 
-        //leave constructor for interfaces only
+        //patch constructor for classes
         if (!getTargetType().isInterface()) {
-            definition.fields.pop();
+            var constructor = definition.fields[1];
+            var args        = extendedType.getConstructorArgs();
+            var argsExprs   = args.map(function(a) return macro $i{a.name});
+
+            switch (constructor.kind) {
+                case FFun(fn):
+                    fn.args = fn.args.concat(args);
+                    switch (fn.expr.expr) {
+                        case EBlock(exprs):
+                            exprs.push(macro super($a{argsExprs}));
+                            fn.expr.expr = EBlock(exprs);
+                            constructor.kind = FFun(fn);
+                        case _:
+                    }
+                case _ :
+            }
         }
 
         return definition.fields;

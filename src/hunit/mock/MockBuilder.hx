@@ -53,10 +53,19 @@ class MockBuilder<T>
      */
     private function assignMockData (instance:T) : Void
     {
-        var mockData = new MockData(this.test, targetClass, fullStub, strictMode);
+        var mockData = createMockData();
         Reflect.setProperty(instance, '__hu_mock__', mockData);
     }
 
+
+    /**
+     * Create MockData instance
+     *
+     */
+    private function createMockData () : MockData
+    {
+        return new MockData(test, targetClass, fullStub, strictMode);
+    }
 
     /**
      * Setter `strictMode`

@@ -15,6 +15,36 @@ using hunit.Utils;
  */
 class TypeUtils
 {
+    /** Cache for extended types by `extendWith()` */
+    static private var extendedTypes : Map<String,TypeDefinition> = new Map();
+
+
+    /**
+     * Extend parametrized `type` with `params` type parameters
+     *
+     */
+    static public function extendWith (type:Type, params:Array<Type>) : Type
+    {
+        var fullName = type.getPackName() + '_MockBase_' + params.map(function(t) return t.toString().replace('.', '_')).join('_');
+
+        var definition = extendedTypes.get(fullName);
+
+        if (definition == null) {
+            var pack  = fullName.split('.');
+            var name  = pack.pop();
+            var tpath = type.getTypePath(params);
+
+            definition = macro class Dummy extends $tpath { }
+
+            definition.pack = pack;
+            definition.name = name;
+
+            extendedTypes.set(fullName, definition);
+            Context.defineType(definition);
+        }
+
+        return fullName.getType();
+    }
 
 
     /**
@@ -93,10 +123,39 @@ class TypeUtils
 
         switch (type) {
             case TInst(t, p):
-                var constructor = new ClassBuilder(t.get()).getConstructor();
+                var classType = t.get();
+                var constructor = new ClassBuilder(classType).getConstructor();
+
                 switch (constructor.toHaxe().kind) {
                     case FFun(fn) : args = fn.args;
                     case _ :
+                }
+            case _:
+        }
+
+        return args;
+    }
+
+
+    /**
+     * Get names of constructor arguments
+     *
+     */
+    static public function getConstructorArgsNames (type:Type) : Array<String>
+    {
+        var args : Array<String> = [];
+
+        switch (type) {
+            case TInst(t, p):
+                var classType = t.get();
+                if (classType.constructor != null) {
+                    var texpr = classType.constructor.get().expr();
+
+                    switch (texpr.expr) {
+                        case TFunction(fn):
+                            args = fn.args.map(function(a) return a.v.name);
+                        case _:
+                    }
                 }
             case _:
         }
@@ -114,8 +173,10 @@ class TypeUtils
         var methods : Array<Field> = [];
 
         switch (type) {
-            case TInst(t,_):
-                type = TInst(t,parameters);
+            case TInst(t,p):
+                if (parameters.length > 0) {
+                    type = TInst(t,parameters);
+                }
 
                 switch (type.getFields(true)) {
                     case Success(fields):
@@ -147,7 +208,7 @@ class TypeUtils
     {
         var pack = type.getFullName().split('.');
         //throw out module
-        pack.splice(-2, -1);
+        pack.splice(-2, 1);
 
         return pack.join('.');
     }
