@@ -110,7 +110,8 @@ class MockBuilderGenerator
 
                 fn.args = constructorArgs;
                 fn.expr = macro {
-                    var instance = Type.createInstance($mockClassExpr, [$a{constructorArgsExprs}]);
+                    var args : Array<Dynamic> = [$a{constructorArgsExprs}];
+                    var instance = Type.createInstance($mockClassExpr, args);
                     assignMockData(instance);
                     return instance;
                 }

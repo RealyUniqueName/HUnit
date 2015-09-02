@@ -9,7 +9,7 @@ import hunit.TestCase;
 class MockDummy<T> {
     static public inline var CONSTRUCTOR_EXCEPTION = 'I am original constructor!';
     public var item (default,null) : T;
-    public function new (item:T) this.item = item;
+    public function new (item:T, anotherArg:Bool = false) this.item = item;
     public function helloWorld () return 'Hello, world!';
     public function withOptionalBasicType (intArg:Int = 1, boolArg:Null<Bool>, ?arg2:Float, ?boolArg:Bool = null) return intArg;
     public function withNullOfClass (nulLArg:Null<MockTest>) : Void {}
