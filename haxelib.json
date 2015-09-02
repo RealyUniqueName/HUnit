@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.13",
-    "releasenote"  : "Fix mock builder when mocked constructor requires arguments of different types. ",
+    "version"      : "0.1.14",
+    "releasenote"  : "Fix using constructor of mocked class if constructor calls another method. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
