@@ -20,10 +20,19 @@ class MockDummy<T> {
 }
 
 
+class SimpleMockDummy {
+    public var item (default,null) : String;
+    public function new (item:String, anotherArg:Bool = false) this.item = item;
+}
+
+
 interface IMockDummy<T> {
     public function setItem (item:T) : T;
 }
 
+interface ISimpleMockDummy {
+    public function setItem (item:String) : String;
+}
 
 typedef TDClassDummy<T> = MockDummy<T>;
 
@@ -68,6 +77,32 @@ class MockTest extends TestCase
         assert.type(MockDummy, m);
         assert.type(IMock, m);
         assert.equal(item, m.item);
+    }
+
+
+    /**
+     * Test mock creation on classes without type parameters
+     *
+     */
+    public function testCreate_nonParametrized_class () : Void
+    {
+        var m = mock(SimpleMockDummy).get();
+
+        assert.type(SimpleMockDummy, m);
+        assert.type(IMock, m);
+    }
+
+
+    /**
+     * Test mock creation on interfaces without type parameters
+     *
+     */
+    public function testCreate_nonParametrized_interface () : Void
+    {
+        var m = mock(ISimpleMockDummy).get();
+
+        assert.type(ISimpleMockDummy, m);
+        assert.type(IMock, m);
     }
 
 

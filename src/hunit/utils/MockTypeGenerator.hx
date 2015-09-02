@@ -49,7 +49,7 @@ class MockTypeGenerator
         }
 
         //override parametrized classes to get final types
-        if (targetTypeParameters.length > 0 && !targetType.isInterface()) {
+        if (!targetType.isInterface()) {
             extendedType = targetType.extendWith(targetTypeParameters);
         } else {
             extendedType = targetType;
