@@ -109,9 +109,12 @@ class Utils
         #if !neko
             return Std.string(value);
         #else
+            if (value.hasToString()) return Std.string(value);
+
             return switch (Type.typeof(value)) {
                 case TClass(String) : value;
-                case TClass(_)      : Type.getClassName(Type.getClass(value));
+                case TClass(Array)  : '[' + cast(value, Array<Dynamic>).map(safeToString).join(',') + ']';
+                case TClass(_)      : Type.getClassName(Type.getClass(value)).split('.').pop();
                 case _              : Std.string(value);
             }
         #end
