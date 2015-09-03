@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.15",
-    "releasenote"  : "Fix using constructor of mocked class if constructor calls another method. ",
+    "version"      : "0.1.16",
+    "releasenote"  : "TestCase.modify() to get write access to private fields. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {

@@ -302,9 +302,7 @@ You can get write access to private properties of mocked objects with `TestCase.
 class Dummy 
 {
     private var privateField : String;
-
     public function new () {}
-
     public function getPrivateField() return privateField;
 }
 
@@ -313,9 +311,7 @@ class DummyTest extends hunit.TestCase
     public function testPrivateAccess () 
     {
         var dummy = mock(Dummy).create();
-
         modify(dummy).privateField = 'hello';
-
         assert.equal('hello', dummy.getPrivateField());
     }
 }
