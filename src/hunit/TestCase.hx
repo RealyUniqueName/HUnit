@@ -15,6 +15,7 @@ import hunit.Match;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
+import hunit.mock.MockModifierGenerator;
 import hunit.utils.MockTypeGenerator;
 import hunit.utils.StubCreatorGenerator;
 import hunit.utils.ExpectCreatorGenerator;
@@ -149,14 +150,19 @@ class TestCase
     }
 
 
-    // /**
-    //  * Grants write access to all properties of mocked object
-    //  *
-    //  */
-    // macro public function modify (eThis:Expr, mock:ExprOf<IMock>) : Expr
-    // {
-    //     return macro {};
-    // }
+    /**
+     * Grants write access to all properties of mocked object
+     *
+     */
+    macro public function modify (eThis:Expr, mock:ExprOf<IMock>) : Expr
+    {
+        var mockType  = mock.getMockType();
+        var pos       = Context.currentPos();
+        var generator = new MockModifierGenerator(mockType);
+        var typePath  = generator.getTypeDefinition().toTypePath();
+
+        return macro @:pos(pos) new $typePath($mock);
+    }
 
 
     /**

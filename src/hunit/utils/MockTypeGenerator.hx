@@ -96,8 +96,6 @@ class MockTypeGenerator
 
         var pack   = targetPackName.split('.');
         var name   = pack.pop() + '_' + targetTypeParametersNames.join('_') + '_Mock';
-        //throw out module name
-        pack.pop();
 
         definedType = {
             pack   : pack,

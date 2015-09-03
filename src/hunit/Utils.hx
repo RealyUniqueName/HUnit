@@ -285,6 +285,7 @@ class Utils
     static public function getMockType (mock:Expr) : haxe.macro.Type
     {
         var mockType = mock.typeExpr().t;
+
         if (!mockType.isMock()) {
             Context.error(
                 'Provided expression is not a mock. Did you call get() or create() after mock()?',
