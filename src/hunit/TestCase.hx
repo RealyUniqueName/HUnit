@@ -125,14 +125,7 @@ class TestCase
      */
     macro public function stub<T:IMock> (eThis:Expr, mock:ExprOf<IMock>) : Expr
     {
-        var mockType  = mock.typeExpr().t;
-        if (!mockType.isMock()) {
-            Context.error(
-                'Provided expression is not a mock. Did you call get() or create() after mock()?',
-                Context.currentPos()
-            );
-        }
-
+        var mockType  = mock.getMockType();
         var pos       = Context.currentPos();
         var generator = new StubCreatorGenerator(mockType);
         var typePath  = generator.getTypeDefinition().toTypePath();
@@ -147,20 +140,23 @@ class TestCase
      */
     macro public function expect<T:IMock> (eThis:Expr, mock:ExprOf<IMock>) : Expr
     {
-        var mockType  = mock.typeExpr().t;
-        if (!mockType.isMock()) {
-            Context.error(
-                'Provided expression is not a mock. Did you call get() or create() after mock()?',
-                Context.currentPos()
-            );
-        }
-
+        var mockType  = mock.getMockType();
         var pos       = Context.currentPos();
         var generator = new ExpectCreatorGenerator(mockType);
         var typePath  = generator.getTypeDefinition().toTypePath();
 
         return macro @:pos(pos) new $typePath(hunit.TestCase.getMockData($mock));
     }
+
+
+    // /**
+    //  * Grants write access to all properties of mocked object
+    //  *
+    //  */
+    // macro public function modify (eThis:Expr, mock:ExprOf<IMock>) : Expr
+    // {
+    //     return macro {};
+    // }
 
 
     /**

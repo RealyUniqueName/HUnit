@@ -276,4 +276,25 @@ class Utils
         return macro $v{version};
     }
 
+#if macro
+
+    /**
+     * Retrieve type of `mock`
+     *
+     */
+    static public function getMockType (mock:Expr) : haxe.macro.Type
+    {
+        var mockType = mock.typeExpr().t;
+        if (!mockType.isMock()) {
+            Context.error(
+                'Provided expression is not a mock. Did you call get() or create() after mock()?',
+                Context.currentPos()
+            );
+        }
+
+        return mockType;
+    }
+
+#end
+
 }//class Utils
