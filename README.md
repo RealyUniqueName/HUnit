@@ -15,6 +15,7 @@ Contents
 * [Mocking types with @:autoBuild macros](#mocking-types-with-autobuild-macros)
 * [Stubbing](#stubbing)
 * [Verifying method calls](#verifying-method-calls)
+* [Modifying private properties of mocked object](#modifying-private-properties-of-mocked-object)
 * [Validating exceptions](#validating-exceptions)
 * [Assertions](#assertions)
 * [Matchers](#matchers)
@@ -292,6 +293,33 @@ Specify the amount of expected calls using these methods:
 * `never()` Test passes if method will be never called;
 * `atLeast(amount)` Test passes if method will be called at least `amount` times;
 * `exactly(amount)` Test passes if method will be called exactly `amount` times.
+
+
+Modifying private properties of mocked object
+-----------------
+You can get write access to private properties of mocked objects with `TestCase.modify()` method like this:
+```haxe
+class Dummy 
+{
+    private var privateField : String;
+
+    public function new () {}
+
+    public function getPrivateField() return privateField;
+}
+
+class DummyTest extends hunit.TestCase 
+{
+    public function testPrivateAccess () 
+    {
+        var dummy = mock(Dummy).create();
+
+        modify(dummy).privateField = 'hello';
+
+        assert.equal('hello', dummy.getPrivateField());
+    }
+}
+```
 
 
 Validating exceptions
