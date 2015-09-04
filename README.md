@@ -297,7 +297,7 @@ Specify the amount of expected calls using these methods:
 
 Modifying private properties of mocked object
 -----------------
-You can get write access to private properties of mocked objects with `TestCase.modify()` method like this:
+You can get access to private properties of mocked objects with `TestCase.access()` method like this:
 ```haxe
 class Dummy 
 {

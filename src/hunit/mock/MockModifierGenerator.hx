@@ -115,12 +115,16 @@ class MockModifierGenerator
 
                     switch (member.getVar()) {
                         case Success(v):
-                            if (v.set != 'never') {
-                                var name       = field.name;
-                                var setterBody = macro __hu_mock__.$name = value;
+                            var name = field.name;
+                            fields.push(Member.prop(name, v.type, pos, false, false));
 
-                                fields.push(Member.prop(name, v.type, pos, true, false));
+                            if (v.set != 'never') {
+                                var setterBody = macro return __hu_mock__.$name = value;
                                 fields.push(Member.setter(name, 'value', pos, setterBody));
+                            }
+                            if (v.get != 'never') {
+                                var getterBody = macro return __hu_mock__.$name;
+                                fields.push(Member.getter(name, pos, getterBody));
                             }
                         case Failure(_):
                     }

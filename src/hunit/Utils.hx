@@ -109,12 +109,10 @@ class Utils
         #if !neko
             return Std.string(value);
         #else
-            if (value.hasToString()) return Std.string(value);
-
             return switch (Type.typeof(value)) {
                 case TClass(String) : value;
                 case TClass(Array)  : '[' + cast(value, Array<Dynamic>).map(safeToString).join(',') + ']';
-                case TClass(_)      : Type.getClassName(Type.getClass(value)).split('.').pop();
+                case TClass(_)      : (value.hasToString() ? Std.string(value) : Type.getClassName(Type.getClass(value)).split('.').pop());
                 case _              : Std.string(value);
             }
         #end
@@ -144,7 +142,7 @@ class Utils
     {
         var file = pos.fileName;
         var line = pos.lineNumber;
-        var msg  = Std.string(value);
+        var msg  = value.safeToString();
 
         printer('HUnit: $file:$line: $msg\n');
     }
