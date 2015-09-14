@@ -3,3 +3,5 @@
 -main Test
 -debug
 -neko build/Test.n
+
+-cmd neko build/Test.n

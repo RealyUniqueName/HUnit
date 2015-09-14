@@ -1,6 +1,7 @@
 package hunit.match;
 
 import hunit.match.GenericMatchFactory;
+import hunit.match.MatchFailDescription;
 
 
 /**
@@ -31,6 +32,9 @@ class Match<T>
     /** To chain argument Matchs */
     public var or (get,never) : GenericMatchFactory<T>;
     private var _or : GenericMatchFactory<T>;
+
+    /** If previous match failed, this field should contain reason description. */
+    private var fail : MatchFailDescription;
 
 
     /**
@@ -65,6 +69,16 @@ class Match<T>
         }
 
         return result;
+    }
+
+
+    /**
+     * Get description of failed match reason
+     */
+    @:noCompletion
+    public function getFail () : MatchFailDescription
+    {
+        return null;
     }
 
 

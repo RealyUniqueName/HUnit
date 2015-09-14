@@ -323,13 +323,19 @@ class TypeUtils
     static public function toValidComplexType (type:Type) : ComplexType
     {
         switch (type) {
-            case TType(_.toString() => 'Null', _[0] => TAbstract(_.toString() => name, [])):
-                if (['Int', 'Bool', 'Float'].indexOf(name) >= 0) {
-                    return TPath({
-                        name   : 'Null',
-                        pack   : [],
-                        params : [TPType(TPath({name:name, pack:[], params:[]}))]
-                    });
+            case TType(_.toString() => 'Null', p):
+                if (p.length != 1) {
+                    switch (p[0]) {
+                        case TAbstract(_.toString() => name, []):
+                            if (['Int', 'Bool', 'Float'].indexOf(name) >= 0) {
+                                return TPath({
+                                    name   : 'Null',
+                                    pack   : [],
+                                    params : [TPType(TPath({name:name, pack:[], params:[]}))]
+                                });
+                            }
+                        case _:
+                    }
                 }
             case _:
         }
