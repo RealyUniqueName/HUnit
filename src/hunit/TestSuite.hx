@@ -260,7 +260,7 @@ class TestSuite
             } catch (e:TestFailException) {
                 throw e;
             } catch (e:Dynamic) {
-                validateTest(test, e);
+                validateTest(test, e, CallStack.exceptionStack());
             }
 
             if (!state.warned) {
@@ -313,7 +313,7 @@ class TestSuite
      *
      * @throws hunit.exceptions.TestFailException If test failed.
      */
-    private function validateTest (test:TestData, exception:Dynamic = null) : Void
+    private function validateTest (test:TestData, exception:Dynamic = null, exceptionStack:Array<StackItem> = null) : Void
     {
         //check if test is incomplete
         if (test.isIncomplete) {
@@ -326,7 +326,7 @@ class TestSuite
         }
 
         if (exception != null) {
-            state.validateException(exception, executeTestCallStack);
+            state.validateException(exception, executeTestCallStack, exceptionStack);
         }
 
         for (expect in state.expectedCalls) {

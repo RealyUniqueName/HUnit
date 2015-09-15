@@ -77,13 +77,13 @@ class TestState
      *
      * @throws hunit.exceptions.UnexpectedException If `e` is not an expected exception
      */
-    public function validateException (e:Null<Dynamic>, catchExceptionStack:Array<StackItem>) : Void
+    public function validateException (e:Null<Dynamic>, catchExceptionStack:Array<StackItem>, exceptionStack:Array<StackItem>) : Void
     {
         if (e != null) {
             if (expectedException != null) {
-                expectedException.validate(e, getOriginalExceptionStack(e, catchExceptionStack));
+                expectedException.validate(e, getOriginalExceptionStack(e, catchExceptionStack, exceptionStack));
             } else {
-                throw new UnexpectedException(e, getOriginalExceptionStack(e, catchExceptionStack));
+                throw new UnexpectedException(e, getOriginalExceptionStack(e, catchExceptionStack, exceptionStack));
             }
         }
     }
@@ -157,7 +157,7 @@ class TestState
      * Try to obtain callstack for caught exception `e`
      *
      */
-    public function getOriginalExceptionStack (e:Dynamic, catchExceptionStack:Array<StackItem>) : Array<StackItem>
+    public function getOriginalExceptionStack (e:Dynamic, catchExceptionStack:Array<StackItem>, exceptionStack:Array<StackItem>) : Array<StackItem>
     {
         for (call in callExceptions) {
             if (call.exceptionValue.getValue() == e) {
@@ -165,7 +165,7 @@ class TestState
             }
         }
 
-        return CallStack.exceptionStack().concat(catchExceptionStack);
+        return exceptionStack.concat(catchExceptionStack);
     }
 
 
