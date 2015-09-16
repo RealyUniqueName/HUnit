@@ -136,21 +136,21 @@ class ClassTypeUtils
 
 
     /**
-     * Try to find default value for `argument` of `method` in `type`
+     * Try to find default value for `arg` of `method` in `type`
      */
-    static public function findMethodArgumentValue (ref:Ref<ClassType>, method:String, argument:String) : Null<Expr>
+    static public function findMethodArgumentValue (ref:Ref<ClassType>, method:String, arg:String) : Null<Expr>
     {
         var cls = ref.get();
 
-        if (cls.isInterface || cls.isInterface) {
+        if (cls.isInterface || cls.isExtern) {
             var methods = cachedArgs.get(ref.toString());
             if (methods == null) return null;
             var args = methods.get(method);
             if (args == null) return null;
-            return args.get(argument);
+            return args.get(arg);
 
         } else if (cls.superClass != null) {
-            return cls.superClass.t.findMethodArgumentValue(method, argument);
+            return cls.superClass.t.findMethodArgumentValue(method, arg);
         }
 
         return null;

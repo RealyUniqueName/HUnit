@@ -4,7 +4,7 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.19",
+    "version"      : "0.1.20",
     "releasenote"  : "Bugfixes. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
