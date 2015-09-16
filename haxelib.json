@@ -5,7 +5,7 @@
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
     "version"      : "0.1.20",
-    "releasenote"  : "Bugfixes. ",
+    "releasenote"  : "Fix mocking externs. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
