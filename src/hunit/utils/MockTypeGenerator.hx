@@ -156,7 +156,7 @@ class MockTypeGenerator
                     var __call_id__ = __hu_mock__.methodInvoked($v{m.name}, ARGUMENTS);
                     __hu_mock__.validateStrictMode(__call_id__);
                     MOCKED_CALL;
-                });
+                }, getTargetType());
             });
 
         //for classes
@@ -170,7 +170,7 @@ class MockTypeGenerator
                     } else {
                         SUPER_CALL;
                     }
-                });
+                }, getTargetType());
             });
         }
 

@@ -343,4 +343,19 @@ class TypeUtils
         return type.toComplexType();
     }
 
+
+    /**
+     * Try to find default value for `argument` of `method` in `type`
+     */
+    static public function findMethodArgumentValue (type:Type, method:String, argument:String) : Null<Expr>
+    {
+        switch (type) {
+            case TInst(t,_):
+                return t.findMethodArgumentValue(method, argument);
+            case _:
+        }
+
+        return null;
+    }
+
 }//class TypeUtils

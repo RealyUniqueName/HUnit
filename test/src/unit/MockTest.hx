@@ -28,6 +28,7 @@ class SimpleMockDummy {
 
 interface IMockDummy<T> {
     public function setItem (item:T) : T;
+    public function method (simple:Bool = false) : Void;
 }
 
 interface ISimpleMockDummy {

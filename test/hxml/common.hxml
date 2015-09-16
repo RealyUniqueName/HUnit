@@ -1,6 +1,4 @@
--cp src
+-lib hunit
 -cp test/src
 -main Test
--lib tink_macro
--lib exception
 -debug

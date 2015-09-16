@@ -16,6 +16,59 @@ using hunit.Utils;
 class ClassTypeUtils
 {
 
+    /** Cached default values for method arguments in classes which does not proved default values when typed */
+    static private var cachedArgs : Map<String, Map<String, Map<String,Expr> >> = new Map();
+
+
+    /**
+     * Macro for caching externs method arguments
+     */
+    static public function cacheMethodArguments () : Array<Field>
+    {
+        var ref = Context.getLocalClass();
+        if (ref == null) return null;
+        var cls = ref.get();
+        if (!cls.isExtern && !cls.isInterface) return null;
+
+        for (field in Context.getBuildFields()) {
+            switch (field.kind) {
+                case FFun(_.args => args) :
+                    for (arg in args) {
+                        if (arg.value != null) {
+                            switch (arg.value) {
+                                case macro null :
+                                case _          : cacheArgValue(ref.toString(), field.name, arg.name, arg.value);
+                            }
+                        }
+                    }
+                case _:
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Store argument value in cache
+     */
+    static private function cacheArgValue (className:String, method:String, arg:String, value:Expr) : Void
+    {
+        var methodsMap = cachedArgs.get(className);
+        if (methodsMap == null) {
+            methodsMap = new Map();
+            cachedArgs.set(className, methodsMap);
+        }
+        var argsMap = methodsMap.get(method);
+        if (argsMap == null) {
+            argsMap = new Map();
+            methodsMap.set(method, argsMap);
+        }
+
+        argsMap.set(arg, value);
+    }
+
+
     /**
      * Get own and inherited methods of `classType`.
      *
@@ -79,6 +132,28 @@ class ClassTypeUtils
         }
 
         return (classType.superClass == null ? false : classType.superClass.t.get().isMock());
+    }
+
+
+    /**
+     * Try to find default value for `argument` of `method` in `type`
+     */
+    static public function findMethodArgumentValue (ref:Ref<ClassType>, method:String, argument:String) : Null<Expr>
+    {
+        var cls = ref.get();
+
+        if (cls.isInterface || cls.isInterface) {
+            var methods = cachedArgs.get(ref.toString());
+            if (methods == null) return null;
+            var args = methods.get(method);
+            if (args == null) return null;
+            return args.get(argument);
+
+        } else if (cls.superClass != null) {
+            return cls.superClass.t.findMethodArgumentValue(method, argument);
+        }
+
+        return null;
     }
 
 }//class ClassTypeUtils

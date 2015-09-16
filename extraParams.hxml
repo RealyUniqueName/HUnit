@@ -1,2 +1,3 @@
 # --no-inline
+--macro addGlobalMetadata('', '@:build(hunit.utils.ClassTypeUtils.cacheMethodArguments())', true, true, false)
 -D EXCEPTION_STACK

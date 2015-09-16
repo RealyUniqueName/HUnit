@@ -63,10 +63,10 @@ class FieldUtils
      * Create a copy of specified field.
      *
      */
-    static public function copy (field:Field) : Field
+    static public function copy (field:Field, targetType:Type = null) : Field
     {
         var meta : Metadata = field.meta.copyFieldMeta();
-        var kind : FieldType = field.kind.copyFieldType();
+        var kind : FieldType = field.kind.copyFieldType(targetType, field.name);
 
         var copy : Field = {
             name   : field.name,
@@ -106,7 +106,7 @@ class FieldUtils
      * Create a copy of `FieldType`
      *
      */
-    static public function copyFieldType (fieldType:Null<FieldType>) : Null<FieldType>
+    static public function copyFieldType (fieldType:Null<FieldType>, targetType:Type = null, fieldName:String = null) : Null<FieldType>
     {
         if (fieldType == null) return null;
 
@@ -117,7 +117,7 @@ class FieldUtils
                 copy = FVar(t.copy(), e.copy());
             case FFun(fn):
                 copy = FFun({
-                    args   : fn.args.map(function(a:FunctionArg) return a.copyFunctionArg()),
+                    args   : fn.args.map(function(a:FunctionArg) return a.copyFunctionArg(targetType, fieldName)),
                     ret    : fn.ret, //.copy(),
                     expr   : fn.expr.copy(),
                     params : (fn.params == null ? null : fn.params.map(function(tpd:TypeParamDecl) return tpd.copyTypeParamDecl()))
@@ -153,7 +153,7 @@ class FieldUtils
      * Create a copy of FunctionArg
      *
      */
-    static public function copyFunctionArg (arg:FunctionArg) : FunctionArg
+    static public function copyFunctionArg (arg:FunctionArg, targetType:Type = null, method:String = null) : FunctionArg
     {
         var copy : FunctionArg = {
             name : arg.name,
@@ -173,6 +173,10 @@ class FieldUtils
                     copy.type = TPath({name:name, pack:[], params:[]});
                 case _:
             }
+            if (copy.value == null && targetType != null && method != null) {
+                //check if this is interface or extern
+                copy.value = targetType.findMethodArgumentValue(method, copy.name);
+            }
             if (copy.value != null) {
                 copy.opt = false;
             }
@@ -186,9 +190,9 @@ class FieldUtils
      * Create overriden method.
      *
      */
-    static public function overrideMethod (method:Field, body:Expr) : Field
+    static public function overrideMethod (method:Field, body:Expr, targetType:Type = null) : Field
     {
-        var copy = method.copy();
+        var copy = method.copy(targetType);
         copy.ensureOverrides();
 
         switch (copy.kind) {
@@ -210,9 +214,9 @@ class FieldUtils
      * Create implemented method.
      *
      */
-    static public function implementMethod (method:Field, body:Expr) : Field
+    static public function implementMethod (method:Field, body:Expr, targetType:Type = null) : Field
     {
-        var copy = method.copy();
+        var copy = method.copy(targetType);
 
         switch (copy.kind) {
             case FFun(fn):
