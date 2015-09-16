@@ -142,14 +142,15 @@ class ClassTypeUtils
     {
         var cls = ref.get();
 
-        if (cls.isInterface || cls.isExtern) {
-            var methods = cachedArgs.get(ref.toString());
-            if (methods == null) return null;
+        var methods = cachedArgs.get(ref.toString());
+        if (methods != null) {
             var args = methods.get(method);
-            if (args == null) return null;
-            return args.get(arg);
+            if (args != null) {
+                return args.get(arg);
+            }
+        }
 
-        } else if (cls.superClass != null) {
+        if (cls.superClass != null) {
             return cls.superClass.t.findMethodArgumentValue(method, arg);
         }
 
