@@ -39,7 +39,7 @@ class DefaultWriter implements IReportWriter
     public function write (report:TestReport) : Void
     {
         if (report.notices.length > 0) {
-            printer('NOTICES:\n');
+            printer('NOTICES:\n\n');
 
             for (notice in report.notices) {
                 writeNotice(notice);
@@ -59,7 +59,7 @@ class DefaultWriter implements IReportWriter
         itemsWriteCounter = 0;
 
         if (report.warnings.length > 0) {
-            printer('WARNINGS:\n');
+            printer('WARNINGS:\n\n');
 
             for (warning in report.warnings) {
                 writeWarning(warning);

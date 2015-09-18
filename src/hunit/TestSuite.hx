@@ -254,13 +254,18 @@ class TestSuite
         var passed = false;
 
         try {
-            try {
-                Reflect.callMethod(testCase, test.callback, []);
-                validateTest(test);
-            } catch (e:TestFailException) {
-                throw e;
-            } catch (e:Dynamic) {
-                validateTest(test, e, CallStack.exceptionStack());
+            //check if test is incomplete
+            if (test.isIncomplete) {
+                state.warn(new IncompleteTestWarning(test.incompleteMsg));
+            } else {
+                try {
+                    Reflect.callMethod(testCase, test.callback, []);
+                    validateTest(test);
+                } catch (e:TestFailException) {
+                    throw e;
+                } catch (e:Dynamic) {
+                    validateTest(test, e, CallStack.exceptionStack());
+                }
             }
 
             if (!state.warned) {
@@ -315,11 +320,6 @@ class TestSuite
      */
     private function validateTest (test:TestData, exception:Dynamic = null, exceptionStack:Array<StackItem> = null) : Void
     {
-        //check if test is incomplete
-        if (test.isIncomplete) {
-            state.warn(new IncompleteTestWarning(test.incompleteMsg));
-        }
-
         //test already failed somewhere else
         if (state.pendingExceptions.length > 0) {
             throw state.pendingExceptions[0];
