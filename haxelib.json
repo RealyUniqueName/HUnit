@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.25",
-    "releasenote"  : "Expectations only validate method calls happened after expectation creation. ",
+    "version"      : "0.1.26",
+    "releasenote"  : "Fix default stubbing for mocked interfaces. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {

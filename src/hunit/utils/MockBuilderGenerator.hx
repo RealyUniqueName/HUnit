@@ -117,6 +117,18 @@ class MockBuilderGenerator
             case _:
         }
 
+        //stubAll() by default for interfaces
+        if (mockGenerator.getTargetType().isInterface()) {
+            var stubDef = macro class Dummy {
+                override private function createMockData ()
+                {
+                    fullStub = true;
+                    return super.createMockData();
+                }
+            }
+            def.fields.push(stubDef.fields[0]);
+        }
+
         return def.fields;
     }
 

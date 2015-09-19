@@ -28,7 +28,7 @@ class SimpleMockDummy {
 
 interface IMockDummy<T> {
     public function setItem (item:T) : T;
-    public function method (simple:Bool = false) : Void;
+    public function method (simple:Bool = false) : IMockDummy<T>;
 }
 
 interface ISimpleMockDummy {
@@ -137,6 +137,19 @@ class MockTest extends TestCase
         stub(m).setItem().returns('World');
         var result = m.setItem('Hello');
         assert.equal('World', result);
+    }
+
+
+    /**
+     * Ensure mocked interfaces have all methods stubbed by default
+     *
+     */
+    public function testInterfaceMocking_allMethodsStubbedByDefault () : Void
+    {
+        var m = mock(IMockDummy, [String]).get();
+
+        var result = m.method();
+        assert.isNull(result);
     }
 
 
