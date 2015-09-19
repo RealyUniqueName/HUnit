@@ -124,6 +124,7 @@ class MockData
      */
     public function expect (expect:Expect) : Void
     {
+        expect.fromCallId = callCounter;
         expectations.push(expect);
         testCase.__hu_state.expectedCalls.add(expect);
     }
@@ -248,6 +249,7 @@ class MockData
         var count : Int = 0;
         for (i in 0...callLog.length) {
             call = callLog[i];
+            if (call.id < expect.fromCallId) continue;
 
             if (expect.match(call)) {
                 count ++;

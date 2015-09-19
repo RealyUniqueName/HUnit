@@ -32,6 +32,8 @@ class Expect implements IExpect
     public var pos (default,null) : PosInfos;
     /** How many times this expectations matched method calls during single test */
     public var timesMatched : Int = 0;
+    /** Minimal call id from which expectation becomes active */
+    public var fromCallId : Int = 0;
 
 
     /**

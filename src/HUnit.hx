@@ -34,7 +34,7 @@ class HUnit
      * Search for tests in `-D HUNIT_TEST_DIR="path/to/test/cases` define and add them to test `suite`
      *
      */
-    macro static private function addTestsFromHUnitFlag (suite:ExprOf<TestSuite>) : Expr
+    macro static public function addTestsFromHUnitFlag (suite:ExprOf<TestSuite>) : Expr
     {
         if (haxe.macro.Context.defined('HUNIT_TEST_DIR')) {
             return suite.addTests();
