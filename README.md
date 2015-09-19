@@ -63,7 +63,7 @@ If you don't need any special configuration for your test suite, your `test.hxml
 #plug HUnit
 -lib hunit
 #path to the directory with test cases
--D HUNIT_DIR=tests
+-D HUNIT_TEST_DIR=tests
 #use HUnit as entry point
 -main HUnit
 #for better stack traces
@@ -299,16 +299,16 @@ Modifying private properties of mocked object
 -----------------
 You can get access to private properties of mocked objects with `TestCase.access()` method like this:
 ```haxe
-class Dummy 
+class Dummy
 {
     private var privateField : String;
     public function new () {}
     public function getPrivateField() return privateField;
 }
 
-class DummyTest extends hunit.TestCase 
+class DummyTest extends hunit.TestCase
 {
-    public function testPrivateAccess () 
+    public function testPrivateAccess ()
     {
         var dummy = mock(Dummy).create();
         modify(dummy).privateField = 'hello';

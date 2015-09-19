@@ -34,7 +34,7 @@ class Match<T>
     private var _or : GenericMatchFactory<T>;
 
     /** If previous match failed, this field should contain reason description. */
-    private var fail : MatchFailDescription;
+    // private var fail : MatchFailDescription;
 
 
     /**
@@ -72,14 +72,14 @@ class Match<T>
     }
 
 
-    /**
-     * Get description of failed match reason
-     */
-    @:noCompletion
-    public function getFail () : MatchFailDescription
-    {
-        return null;
-    }
+    // /**
+    //  * Get description of failed match reason
+    //  */
+    // @:noCompletion
+    // public function getFail () : MatchFailDescription
+    // {
+    //     return null;
+    // }
 
 
     /**

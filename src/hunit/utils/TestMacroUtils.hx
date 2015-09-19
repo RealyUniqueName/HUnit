@@ -21,6 +21,18 @@ class TestMacroUtils
 
 
     /**
+     * Add classpath from HUNIT_TEST_DIR
+     */
+    static public function addTestDirClasspath () : Void
+    {
+        if (!Context.defined('HUNIT_TEST_DIR')) return;
+
+        var dir = Context.definedValue('HUNIT_TEST_DIR');
+        haxe.macro.Compiler.addClassPath(dir);
+    }
+
+
+    /**
      * Description
      *
      */
