@@ -249,7 +249,7 @@ public function testStubbing ()
 }
 ```
 You can pass matchers instead of exact values to stubbed method arguments. Read below for more on matchers.
-By default stubbed methods return `null` or type specific default value for `Int`, `Bool`, `Float` on static platforms.
+By default stubbed methods return `null` or type specific default value which is `0` for `Int` and `Float` and `false` for `Bool`.
 
 
 Verifying method calls

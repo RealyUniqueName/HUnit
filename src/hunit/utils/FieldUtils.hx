@@ -307,8 +307,16 @@ class FieldUtils
                     throw e;
                 }
             case _ :
+                var defaultValue = switch (fn.ret) {
+                    case macro:StdTypes.Bool  : macro false;
+                    case macro:StdTypes.Int   : macro 0;
+                    case macro:StdTypes.Float : macro 0.;
+                    case _                    : macro null;
+                }
+
                 macro try {
-                    var result = $callExpr;
+                    var result : Dynamic = $callExpr;
+                    if (result == null) result = $defaultValue;
                     __hu_mock__.addCallResult(__call_id__, result);
                     __hu_mock__.validateCall(__call_id__);
                     return result;
