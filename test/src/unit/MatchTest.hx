@@ -304,9 +304,19 @@ class MatchTest extends TestCase
     public function testAbstractMatchOfDynamicFromRealMatch () : Void
     {
         var src = match.type(MatchTest);
-        var abstractMatch : hunit.Match<Dynamic> = src;
+        var abstractMatch : hunit.Match<MatchTest> = src;
 
         assert.equal(src, cast abstractMatch);
+    }
+
+
+    /**
+     * Ensure `hunit.Match<Float>` does not throw 'cannot access field for writing' exception on CS
+     */
+    public function testAvstractMatchOnFloatDoesNotThrowWriteErrorOnCS () : Void
+    {
+        (match.equal(80.) : hunit.Match<Float>);
+        assert.success();
     }
 
 }//class MatchTest

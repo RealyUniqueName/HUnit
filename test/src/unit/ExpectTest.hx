@@ -9,6 +9,7 @@ class ExpectDummy<T> {
     public function new (item:T) this.item = item;
     public function setItem(newItem:T) return item = newItem;
     public function someMethod(e:Dynamic) throw e;
+    public function csMethod (v:Float) : Void {}
     public function catchUnexpectedCallException() {
         try {
             setItem(null);
@@ -105,6 +106,20 @@ class ExpectTest extends TestCase
 
         //clear expectations
         __hu_state.expectedCalls.pop();
+    }
+
+
+    /**
+     * Description
+     */
+    @group('inc')
+    public function testExpect_fieldWithFloatArg_doesNotThroWriteError () : Void
+    {
+        var m = mock(ExpectDummy, [String]).get();
+
+        expect(m).csMethod(80.).once();
+
+        m.csMethod(80);
     }
 
 }//class ExpectTest

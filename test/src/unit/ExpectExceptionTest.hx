@@ -26,6 +26,18 @@ class ExpectExceptionTest extends TestCase
 
 
     /**
+     * Check that test passes when expecting specific type of exception
+     *
+     */
+    public function testExpectException_ofType_testPass () : Void
+    {
+        expectException(match.type(ExpectExceptionTest));
+
+        throw this;
+    }
+
+
+    /**
      * Check that test fails when expected exception is not thrown
      *
      */
