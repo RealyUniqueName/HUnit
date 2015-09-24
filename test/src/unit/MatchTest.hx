@@ -313,6 +313,7 @@ class MatchTest extends TestCase
     /**
      * Ensure `hunit.Match<Float>` does not throw 'cannot access field for writing' exception on CS
      */
+    @group('inc')
     public function testAbstractMatchOnFloatDoesNotThrowWriteErrorOnCS () : Void
     {
         (match.equal(80.) : hunit.Match<Float>);

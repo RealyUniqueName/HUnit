@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.27",
-    "releasenote"  : "Return default values from stubbed methods for Int, Bool, Float on all platforms. ",
+    "version"      : "0.1.28",
+    "releasenote"  : "Fixed C# bug which prevented to create abstarct macthers of matchers with basic types. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {

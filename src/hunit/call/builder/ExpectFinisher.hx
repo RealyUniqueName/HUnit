@@ -51,7 +51,7 @@ class ExpectFinisher<RETURNS>
     public function throws (exception:Match<Dynamic>) : ExpectFinisher<RETURNS>
     {
         if (expect.throws.hasValue()) throw new Exception('Expected exception is already set');
-        expect.throws = Thing(exception);
+        expect.throws = Thing((exception:RealMatch<Dynamic>));
 
         return this;
     }
