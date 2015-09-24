@@ -113,7 +113,7 @@ class ExpectTest extends TestCase
      * Description
      */
     @group('inc')
-    public function testExpect_fieldWithFloatArg_doesNotThroWriteError () : Void
+    public function testExpect_fieldWithFloatArg_doesNotThrowWriteErrorOnCs () : Void
     {
         var m = mock(ExpectDummy, [String]).get();
 
