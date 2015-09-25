@@ -34,9 +34,9 @@ class GenericMatchFactory<T>
      * Match any value
      *
      */
-    public function any () : AnyMatch<Dynamic>
+    public function any () : AnyMatch<T>
     {
-        return new AnyMatch<Dynamic>(previous, chainLogic);
+        return new AnyMatch<T>(previous, chainLogic);
     }
 
 

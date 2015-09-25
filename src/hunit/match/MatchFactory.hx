@@ -29,9 +29,9 @@ class MatchFactory
      * Match any value
      *
      */
-    public function any () : AnyMatch<Dynamic>
+    public function any<T> () : AnyMatch<T>
     {
-        return new AnyMatch<Dynamic>();
+        return new AnyMatch<T>();
     }
 
 

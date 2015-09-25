@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.28",
-    "releasenote"  : "Fixed C# bug which prevented to create abstarct macthers of matchers with basic types. ",
+    "version"      : "0.1.29",
+    "releasenote"  : "Changed match.any<Dynamic>() to match.any<T>(). ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
