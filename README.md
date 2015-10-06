@@ -479,7 +479,7 @@ Meta for test methods
 * `@test`
 Method is considered to be a test if marked with this meta.
 * `@group('group1', 'group2', <...>)`
-Assign test to specified groups.
+Assign test to specified groups. If this meta is set for test case class, then all tests in that case will be assigned to specified groups.
 * `@incomplete('Because something is not implemented')`
 Mark test as incomplete. This meta will add warning to test report.
 * `@depends('testAnotherThing', 'testDifferentThing')`

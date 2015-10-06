@@ -41,6 +41,8 @@ class TestCaseData
     private var rtti : Classdef;
     /** list of tests in test case */
     private var tests : Array<TestData>;
+    /** Default groups to assign tests to */
+    private var defaultGroups : Array<String>;
 
 
     /**
@@ -112,7 +114,10 @@ class TestCaseData
     public function new (testCase:TestCase) : Void
     {
         tests = [];
+        defaultGroups = [];
         this.testCase = testCase;
+
+        processTestCaseRttiMeta();
 
         gatherTestData();
     }
@@ -135,6 +140,22 @@ class TestCaseData
         }
 
         return sortByDependencies(result);
+    }
+
+
+    /**
+     * Get list of groups from `@group` meta of test case
+     */
+    private function processTestCaseRttiMeta () : Void
+    {
+        for (meta in rtti.meta) {
+            switch (meta.name) {
+                case 'group':
+                    var mGroups = meta.params.map(StringTools.replace.bind(_, '"', ''));
+                    defaultGroups = defaultGroups.concat(mGroups);
+                case _:
+            }
+        }
     }
 
 
@@ -163,7 +184,7 @@ class TestCaseData
     {
         var callback     = testCase.field(field.name);
         var isIncomplete = false;
-        var groups        : Array<String> = [];
+        var groups        : Array<String> = defaultGroups.copy();
         var incompleteMsg : String = null;
         var depends       : Array<String> = [];
 

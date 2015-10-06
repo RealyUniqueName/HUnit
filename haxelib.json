@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.29",
-    "releasenote"  : "Changed match.any<Dynamic>() to match.any<T>(). ",
+    "version"      : "0.1.30",
+    "releasenote"  : "@group can also be applied to whole test case. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
