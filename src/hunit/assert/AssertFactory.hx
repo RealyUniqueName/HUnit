@@ -49,7 +49,7 @@ class AssertFactory
      */
     public function equal<T> (expected:T, actual:T, message:String = null, ?pos:PosInfos) : Void
     {
-        var assert = new MatchAssert(testCase.match.equal(expected), actual, pos);
+        var assert = new MatchAssert(testCase.match.equal(expected), actual, message, pos);
         testCase.__hu_state.asserted.add(assert);
 
         assert.validate();
@@ -62,7 +62,7 @@ class AssertFactory
      */
     public function notEqual<T> (expected:T, actual:T, message:String = null, ?pos:PosInfos) : Void
     {
-        var assert = new MatchAssert(testCase.match.notEqual(expected), actual, pos);
+        var assert = new MatchAssert(testCase.match.notEqual(expected), actual, message, pos);
         testCase.__hu_state.asserted.add(assert);
 
         assert.validate();
