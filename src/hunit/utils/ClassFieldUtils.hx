@@ -18,11 +18,7 @@ class ClassFieldUtils
 
     static public function toField(classField:ClassField) : Field
     {
-        if (classField.params.length != 0) {
-            throw "Invalid TAnonymous";
-        }
-
-        var kind = classField.toFieldType(classField.type);
+        var kind = classField.toFieldType(classField.type, classField.params);
 
         var access = [(classField.isPublic ? APublic : APrivate)];
         if (classField.isInlined()) access.push(AInline);
@@ -57,7 +53,7 @@ class ClassFieldUtils
      * Convert classField.kind to field.kind
      *
      */
-    static public function toFieldType (classField:ClassField, fieldType:Type) : FieldType
+    static public function toFieldType (classField:ClassField, fieldType:Type, params:Array<TypeParameter>) : FieldType
     {
         var fieldKind : FieldKind = classField.kind;
         var kind      : FieldType = null;
@@ -72,7 +68,7 @@ class ClassFieldUtils
                 );
 
             case [ FMethod(_), TFun(args, ret) ]:
-                kind = FFun({
+                var fn : Function = {
                     args: [
                         for (i in 0...args.length) {
                             name  : args[i].name,
@@ -83,7 +79,19 @@ class ClassFieldUtils
                     ],
                     ret  : ret.toValidComplexType(),
                     expr : null,
-                });
+                }
+                if (params != null && params.length > 0) {
+                    fn.params = [];
+                    for (p in params) {
+                        fn.params.push({
+                            name : p.name,
+                            constraints : [],
+                            params : []
+                        });
+                    }
+                }
+
+                kind = FFun(fn);
 
             case [ FMethod(q), TLazy(getType) ]:
                 var lazyId : Int = LazyTypes.register(getType);

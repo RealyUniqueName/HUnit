@@ -23,6 +23,7 @@ class MockDummy<T> {
 class SimpleMockDummy {
     public var item (default,null) : String;
     public function new (item:String, anotherArg:Bool = false) this.item = item;
+    public function parametrized<T,D> (v:T,b:D) : T return v;
 }
 
 
@@ -88,6 +89,7 @@ class MockTest extends TestCase
     public function testCreate_nonParametrized_class () : Void
     {
         var m = mock(SimpleMockDummy).get();
+// expect(m).parametrized(0, 'hello').once();
 
         assert.type(SimpleMockDummy, m);
         assert.type(IMock, m);

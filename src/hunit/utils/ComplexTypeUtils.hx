@@ -31,7 +31,15 @@ class ComplexTypeUtils
      */
     static public function isBasicType (complexType:Null<ComplexType>) : Bool
     {
-        return (complexType == null ? false : complexType.toType().isBasicType());
+        var isBasic = false;
+
+        try {
+            isBasic = (complexType == null ? false : complexType.toType().isBasicType());
+        } catch (e:Dynamic) {
+
+        }
+
+        return isBasic;
     }
 
 
