@@ -168,7 +168,7 @@ class TypeUtils
      * Collect all methods of specified `type` (with type `parameters` applied) and parent classes except constructor.
      *
      */
-    static public function getMethods (type:Type, parameters:Array<Type>) : Array<Field>
+    static public function getMethods (type:Type, parameters:Array<Type>, skipParametrized:Bool = false) : Array<Field>
     {
         var methods : Array<Field> = [];
 
@@ -177,6 +177,7 @@ class TypeUtils
                 if (parameters.length > 0) {
                     type = TInst(t,parameters);
                 }
+                var className = t.toString();
 
                 switch (type.getFields(true)) {
                     case Success(fields):
@@ -184,7 +185,9 @@ class TypeUtils
                             switch (field.kind) {
                                 case FMethod(_):
                                     if (field.name != 'new') {
-                                        methods.push(field.toField());
+                                        if (!skipParametrized || field.params.length == 0) {
+                                            methods.push(field.toField(className, t.get()));
+                                        }
                                     }
                                 case _:
                             }

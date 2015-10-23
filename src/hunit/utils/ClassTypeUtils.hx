@@ -16,86 +16,89 @@ using hunit.Utils;
 class ClassTypeUtils
 {
 
-    /** Cached default values for method arguments in classes which does not proved default values when typed */
-    static private var cachedArgs : Map<String, Map<String, Map<String,Expr> >> = new Map();
+    // /** Cached default values for method arguments in classes which does not proved default values when typed */
+    // static private var cachedArgs : Map<String, Map<String, Map<String,Expr> >> = new Map();
+    /** Description */
+    static private var cachedMethods : Map<String, Map<String, Function>> = new Map();
 
 
     /**
      * Macro for caching externs method arguments
      */
-    static public function cacheMethodArguments () : Array<Field>
+    static public function cacheMethodSignatures () : Array<Field>
     {
         var ref = Context.getLocalClass();
         if (ref == null) return null;
-        var cls = ref.get();
-        if (!cls.isExtern && !cls.isInterface) return null;
 
+        var methods = new Map<String, Function>();
         for (field in Context.getBuildFields()) {
             switch (field.kind) {
-                case FFun(_.args => args) :
-                    for (arg in args) {
-                        if (arg.value != null) {
-                            switch (arg.value) {
-                                case macro null :
-                                case _          : cacheArgValue(ref.toString(), field.name, arg.name, arg.value);
-                            }
-                        }
-                    }
+                case FFun(fn) :
+                    methods.set(field.name, fn);
                 case _:
             }
+        }
+
+        cachedMethods.set(ref.toString(), methods);
+
+        return null;
+    }
+
+    /**
+     * Get `methodName` cached with `ClassTypeUtils.cacheMethodSignatures()`
+     */
+    static public function getCachedMethod (classType:ClassType = null, className:String, methodName:String) : Null<Function>
+    {
+        if (classType == null) {
+            var type = className.getType();
+            switch (type) {
+                case TInst(t,_): classType = t.get();
+                case _:
+            }
+        }
+
+        var methods = cachedMethods.get(className);
+        if (methods == null) return null;
+
+        var field = methods.get(methodName);
+        if (field != null) return field;
+
+        if (classType.superClass != null) {
+            var ref = classType.superClass.t;
+            return getCachedMethod(ref.get(), ref.toString(), methodName);
         }
 
         return null;
     }
 
 
-    /**
-     * Store argument value in cache
-     */
-    static private function cacheArgValue (className:String, method:String, arg:String, value:Expr) : Void
-    {
-        var methodsMap = cachedArgs.get(className);
-        if (methodsMap == null) {
-            methodsMap = new Map();
-            cachedArgs.set(className, methodsMap);
-        }
-        var argsMap = methodsMap.get(method);
-        if (argsMap == null) {
-            argsMap = new Map();
-            methodsMap.set(method, argsMap);
-        }
+    // /**
+    //  * Get own and inherited methods of `classType`.
+    //  *
+    //  * @param classType
+    //  * @param filter Don't add methods wich names are listed here
+    //  */
+    // static public function getMethods (classType:ClassType, filter:Array<String>) : Array<Field>
+    // {
+    //     var fields : Array<Field> = [];
 
-        argsMap.set(arg, value);
-    }
+    //     for (classField in classType.fields.get()) {
+    //         if (classField.name.skipField(filter)) continue;
 
+    //         var field = classField.toField();
+    //         switch(field.kind) {
+    //             case FFun(_) : fields.push(field);
+    //             case _:
+    //         }
+    //     }
 
-    /**
-     * Get own and inherited methods of `classType`.
-     *
-     * @param classType
-     * @param filter Don't add methods wich names are listed here
-     */
-    static public function getMethods (classType:ClassType, filter:Array<String>) : Array<Field>
-    {
-        var fields : Array<Field> = [];
+    //     if (classType.superClass != null) {
+    //         filter = filter.concat(fields.map(function(f) return f.name));
+    //         fields = fields.concat(classType.superClass.t.get().getMethods(filter));
+    //     }
 
-        for (classField in classType.fields.get()) {
-            if (classField.name.skipField(filter)) continue;
-
-            var field = classField.toField();
-            switch(field.kind) {
-                case FFun(_) : fields.push(field);
-                case _:
-            }
-        }
-
-        if (classType.superClass != null) {
-            filter = filter.concat(fields.map(function(f) return f.name));
-            fields = fields.concat(classType.superClass.t.get().getMethods(filter));
-        }
-
-        return fields;
-    }
+    //     return fields;
+    // }
 
 
     /**
@@ -141,12 +144,20 @@ class ClassTypeUtils
     static public function findMethodArgumentValue (ref:Ref<ClassType>, method:String, arg:String) : Null<Expr>
     {
         var cls = ref.get();
+        var className = ref.toString();
 
-        var methods = cachedArgs.get(ref.toString());
+        var methods = cachedMethods.get(className);
         if (methods != null) {
-            var args = methods.get(method);
-            if (args != null) {
-                return args.get(arg);
+            var fn = methods.get(method);
+            if (fn != null) {
+                var args = fn.args;
+                if (args != null) {
+                    for (a in args) {
+                        if (a.name == arg) {
+                            return a.value;
+                        }
+                    }
+                }
             }
         }
 

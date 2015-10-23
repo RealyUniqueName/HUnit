@@ -147,7 +147,7 @@ class MockTypeGenerator
     private function getMockFields () : Array<Field>
     {
         var fields  : Array<Field> = getServiceFields();
-        var methods : Array<Field> = getTargetType().getMethods(getTargetTypeParameters()).filter(function(m) return !m.isInlined());
+        var methods : Array<Field> = getTargetType().getMethods(getTargetTypeParameters(), true).filter(function(m) return !m.isInlined());
 
         //for interfaces
         if (getTargetType().isInterface()) {

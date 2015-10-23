@@ -1,4 +1,4 @@
 # --no-inline
 --macro hunit.utils.TestMacroUtils.addTestDirClasspath()
---macro addGlobalMetadata('', '@:build(hunit.utils.ClassTypeUtils.cacheMethodArguments())', true, true, false)
+--macro addGlobalMetadata('', '@:build(hunit.utils.ClassTypeUtils.cacheMethodSignatures())', true, true, false)
 -D EXCEPTION_STACK

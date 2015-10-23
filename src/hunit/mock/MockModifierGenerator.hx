@@ -111,7 +111,7 @@ class MockModifierGenerator
             case Success(mockFields):
                 for (field in mockFields) {
                     if (field.name == '__hu_mock__') continue;
-                    var member : Member = field.toField();
+                    var member : Member = field.toField(getTarget().toString());
 
                     switch (member.getVar()) {
                         case Success(v):

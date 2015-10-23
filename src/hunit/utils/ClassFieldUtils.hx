@@ -16,9 +16,9 @@ using hunit.Utils;
 class ClassFieldUtils
 {
 
-    static public function toField(classField:ClassField) : Field
+    static public function toField(classField:ClassField, className:String, classType:ClassType = null) : Field
     {
-        var kind = classField.toFieldType(classField.type, classField.params);
+        var kind = classField.toFieldType(classField.type, classField.params, className, classType);
 
         var access = [(classField.isPublic ? APublic : APrivate)];
         if (classField.isInlined()) access.push(AInline);
@@ -53,7 +53,7 @@ class ClassFieldUtils
      * Convert classField.kind to field.kind
      *
      */
-    static public function toFieldType (classField:ClassField, fieldType:Type, params:Array<TypeParameter>) : FieldType
+    static public function toFieldType (classField:ClassField, fieldType:Type, params:Array<TypeParameter>, className:String, classType:ClassType = null) : FieldType
     {
         var fieldKind : FieldKind = classField.kind;
         var kind      : FieldType = null;
@@ -81,13 +81,18 @@ class ClassFieldUtils
                     expr : null,
                 }
                 if (params != null && params.length > 0) {
-                    fn.params = [];
-                    for (p in params) {
-                        fn.params.push({
-                            name : p.name,
-                            constraints : [],
-                            params : []
-                        });
+                    var fieldFn = classType.getCachedMethod(className, classField.name);
+                    if (fieldFn != null) {
+                        fn.params = fieldFn.params;
+                    } else {
+                        fn.params = [];
+                        for (p in params) {
+                            fn.params.push({
+                                name : p.name,
+                                constraints : [],
+                                params : []
+                            });
+                        }
                     }
                 }
 
