@@ -35,4 +35,22 @@ class CTypeClassFieldsUtils
         return false;
     }
 
+
+    /**
+     * Check if field implements test
+     *
+     */
+    static public function mIsTest (field:haxe.macro.Type.ClassField) : Bool
+    {
+        //field name starts  with 'test'
+        if (field.name.substr(0, TEST_INDICATOR.length) == TEST_INDICATOR) {
+            return true;
+
+        } else {
+            return field.meta.has(TEST_INDICATOR);
+        }
+
+        return false;
+    }
+
 }//class CTypeClassFieldsUtils

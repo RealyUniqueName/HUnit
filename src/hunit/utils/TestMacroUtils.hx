@@ -7,6 +7,7 @@ import sys.io.File;
 import hunit.utils.FileSystemUtils;
 
 using hunit.Utils;
+using hunit.utils.CTypeClassFieldUtils;
 
 
 
@@ -91,6 +92,61 @@ class TestMacroUtils
 
 
 
+    /**
+     * Prepare test case classes
+     */
+    macro static public function buildTestCase () : Array<Field>
+    {
+        var cls = Context.getLocalClass().get();
+        var fields : Array<Field> = null;
+
+        for (meta in cls.meta.extract('inheritTests')) {
+            if (fields == null) fields = Context.getBuildFields();
+
+            var list : Array<String> = null;
+            if (meta.params != null && meta.params.length > 0) {
+                list = meta.params.map(function(e) {
+                    return switch (e.expr) {
+                        case EConst(CString(testName)): testName;
+                        case _ : Context.error('Only string constants allowed in arguments of @inheritTests meta', Context.currentPos());
+                    }
+                });
+            } else {
+                list = getTestCaseTestMethodsList(cls);
+            }
+
+            for (testName in list) {
+                var def = macro class Dummy {
+                    @test override public function $testName () super.$testName();
+                }
+
+                fields.push(def.fields[0]);
+            }
+        }
+
+        return fields;
+    }
+
+
+    /**
+     * Get list of test methods in `caseClass` type
+     */
+    static private function getTestCaseTestMethodsList (caseClass:ClassType) : Array<String>
+    {
+        var list : Array<String> = [];
+
+        if (caseClass.superClass != null) {
+            caseClass = caseClass.superClass.t.get();
+
+            for (field in caseClass.fields.get()) {
+                if (!field.mIsTest()) continue;
+
+                list.push(field.name);
+            }
+        }
+
+        return list;
+    }
 
 
 }//class TestMacroUtils

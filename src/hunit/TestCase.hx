@@ -32,6 +32,7 @@ using hunit.Utils;
 @:access(hunit.mock.IMock)
 @:rtti
 @:keepSub
+#if !macro @:autoBuild(hunit.utils.TestMacroUtils.buildTestCase()) #end
 class TestCase
 {
     /** Creates patterns for mocked methods' arguments */
