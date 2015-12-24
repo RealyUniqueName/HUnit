@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.32",
-    "releasenote"  : "@inheritTests meta (see readme). ",
+    "version"      : "0.1.33",
+    "releasenote"  : "Disabled expects and stubs for generic methods. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
