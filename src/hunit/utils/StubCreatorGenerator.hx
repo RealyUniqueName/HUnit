@@ -91,7 +91,7 @@ class StubCreatorGenerator
      */
     private function getCreatorFields () : Array<Field>
     {
-        var methods = getTarget().getMethods([]).map(function(m) return stubMethod(m));
+        var methods = getTarget().getMethods([], true).map(function(m) return stubMethod(m));
         //exclude `toString()` because creating `toString()` methods which return non-string values is not allowed in HXCPP
         methods = methods.filter(function(m) return m.name != 'toString');
 
