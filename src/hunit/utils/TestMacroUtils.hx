@@ -18,7 +18,7 @@ using hunit.utils.CTypeClassFieldUtils;
 class TestMacroUtils
 {
     /** Description */
-    static private var erPackage : EReg = ~/^package\s+([a-z0-9_.]+);/i;
+    static private var erPackage : EReg = ~/^package +([a-z0-9_.]+);/i;
 
 
     /**
