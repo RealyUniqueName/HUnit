@@ -169,11 +169,49 @@ class TestSuite
         printSummary();
 
         restoreOriginalTrace();
+    }
 
-        #if flash
-        if (shutDownStandaloneFlashPlayer) {
-            flash.Lib.fscommand('quit');
-        }
+
+    /**
+     * Tries to close app with correct exit code
+     */
+    public function exitWithCode () : Void
+    {
+        var exitCode = (report.isSuccess() ? 0 : 1);
+
+        #if sys
+            Sys.exit(exitCode);
+
+        #elseif js
+            if(untyped __js__('typeof process != "undefined"')) {
+                untyped __js__('process').exit(exitCode);
+            }
+            if(untyped __js__('typeof phantom != "undefined"')) {
+              untyped __js__('phantom').exit(exitCode);
+            }
+
+        #elseif flash
+            #if exit
+                if(flash.system.Security.sandboxType == "localTrusted") {
+                    var delay = 5;
+                    trace('all done, exiting in $delay seconds');
+                    haxe.Timer.delay(function() {
+                        try {
+                            flash.system.System.exit(exitCode);
+                        } catch(e : Dynamic) {
+                            if (shutDownStandaloneFlashPlayer) {
+                                flash.Lib.fscommand('quit');
+                            }
+                        }
+                    }, delay * 1000);
+                } else if (shutDownStandaloneFlashPlayer) {
+                    flash.Lib.fscommand('quit');
+                }
+            #else
+                if (shutDownStandaloneFlashPlayer) {
+                    flash.Lib.fscommand('quit');
+                }
+            #end
         #end
     }
 

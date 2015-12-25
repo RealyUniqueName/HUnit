@@ -27,6 +27,7 @@ class HUnit
         var suite = new TestSuite();
         addTestsFromHUnitFlag(suite);
         suite.run();
+        suite.exitWithCode();
     }
 
 

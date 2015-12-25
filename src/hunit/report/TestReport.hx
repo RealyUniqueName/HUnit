@@ -63,6 +63,15 @@ class TestReport
 
 
     /**
+     * Returns `true` if no wrangins and failures occured
+     */
+    public function isSuccess () : Bool
+    {
+        return warnings.length == 0 && fails.length == 0 && skipped.length == 0;
+    }
+
+
+    /**
      * Add exceptions of failed tests
      *
      */
