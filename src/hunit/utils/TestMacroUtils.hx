@@ -22,6 +22,20 @@ class TestMacroUtils
 
 
     /**
+     * Compiler macro to detect if run in travis-ci
+     */
+    static public function detectTravis () : Void
+    {
+        for (env in Sys.environment().keys()) {
+            if (env.indexOf('TRAVIS') >= 0) {
+                haxe.macro.Compiler.define('TRAVIS');
+                break;
+            }
+        }
+    }
+
+
+    /**
      * Add classpath from HUNIT_TEST_DIR
      */
     static public function addTestDirClasspath () : Void

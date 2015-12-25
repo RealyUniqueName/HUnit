@@ -65,6 +65,10 @@ class DefaultWriter implements IReportWriter
                 writeWarning(warning);
             }
         }
+
+        #if (TRAVIS && !sys)
+            printer('success: ' + (report.isSuccess() ? 'true' : 'false') + '\n' );
+        #end
     }
 
 

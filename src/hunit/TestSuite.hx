@@ -191,27 +191,21 @@ class TestSuite
             }
 
         #elseif flash
-            #if exit
-                if(flash.system.Security.sandboxType == "localTrusted") {
-                    var delay = 5;
-                    trace('all done, exiting in $delay seconds');
-                    haxe.Timer.delay(function() {
-                        try {
-                            flash.system.System.exit(exitCode);
-                        } catch(e : Dynamic) {
-                            if (shutDownStandaloneFlashPlayer) {
-                                flash.Lib.fscommand('quit');
-                            }
+            if(flash.system.Security.sandboxType == "localTrusted") {
+                var delay = 5;
+                trace('all done, exiting in $delay seconds');
+                haxe.Timer.delay(function() {
+                    try {
+                        flash.system.System.exit(exitCode);
+                    } catch(e : Dynamic) {
+                        if (shutDownStandaloneFlashPlayer) {
+                            flash.Lib.fscommand('quit');
                         }
-                    }, delay * 1000);
-                } else if (shutDownStandaloneFlashPlayer) {
-                    flash.Lib.fscommand('quit');
-                }
-            #else
-                if (shutDownStandaloneFlashPlayer) {
-                    flash.Lib.fscommand('quit');
-                }
-            #end
+                    }
+                }, delay * 1000);
+            } else if (shutDownStandaloneFlashPlayer) {
+                flash.Lib.fscommand('quit');
+            }
         #end
     }
 
