@@ -4,8 +4,8 @@
     "license"      : "MIT",
     "tags"         : ["unit", "test", "cross", "mock", "mocking"],
     "description"  : "HUnit - unit testing framework with mocks",
-    "version"      : "0.1.33",
-    "releasenote"  : "Disabled expects and stubs for generic methods. ",
+    "version"      : "0.1.34",
+    "releasenote"  : "Travis-CI support. ",
     "classPath"    : "src",
     "contributors" : ["RealyUniqueName"],
     "dependencies" : {
