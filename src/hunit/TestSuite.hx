@@ -421,6 +421,9 @@ class TestSuite
     {
         printer(report.getSummary() + '\n');
         printer('\n');
+        #if (TRAVIS && !sys)
+            printer('success: ' + (report.isSuccess() ? 'true' : 'false') + '\n' );
+        #end
     }
 
 
