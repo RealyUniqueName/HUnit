@@ -484,7 +484,7 @@ Assign test to specified groups. If this meta is set for test case class, then a
 Mark test as incomplete. This meta will add warning to test report.
 * `@depends('testAnotherThing', 'testDifferentThing')`
 If `testAnotherThing` fails or `testDifferentThig` fails, then test with this meta will be skipped. All these tests must be in one TestCase.
-* `@inheritTests('testSomeThing', 'testAnotherThing')
+* `@inheritTests('testSomeThing', 'testAnotherThing')`
 If `MyTest` extends `AnotherTest`, then this meta copies specified test methods from `AnotherTest` to `MyTest`. If no test names provided, then all tests will be copied.
 
 
