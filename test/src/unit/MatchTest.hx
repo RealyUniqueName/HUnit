@@ -320,4 +320,28 @@ class MatchTest extends TestCase
         assert.success();
     }
 
+
+    @test
+    public function equal_similarEnumValues_returnsTrue () : Void
+    {
+        var matcher = match.equal(Item1('Hello'));
+        var value = Item1('Hello');
+
+        var matched = matcher.match(value);
+
+        assert.isTrue(matched);
+    }
+
+
+    @test
+    public function equal_differentEnumValues_returnsFalse () : Void
+    {
+        var matcher = match.equal(Item1('Hello'));
+        var value = Item1('World');
+
+        var matched = matcher.match(value);
+
+        assert.isFalse(matched);
+    }
+
 }//class MatchTest
